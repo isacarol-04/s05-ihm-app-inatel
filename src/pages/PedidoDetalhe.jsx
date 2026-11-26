@@ -1,11 +1,13 @@
 import { useCallback, useState } from "react"
 import { Navigate, useParams } from "react-router-dom"
-import { CircleCheck, Info, TriangleAlert } from "lucide-react"
+import { CircleCheck, Info, MapPin, TriangleAlert } from "lucide-react"
 import { HeaderInterno } from "@/components/layout/HeaderInterno"
 import { RodapeAcoes } from "@/components/layout/RodapeAcoes"
+import { AvaliacaoAtendimento } from "@/components/pedidos/AvaliacaoAtendimento"
 import { AvisoPendencia } from "@/components/pedidos/AvisoPendencia"
 import { CampoResposta } from "@/components/pedidos/CampoResposta"
 import { ConversaSecretaria } from "@/components/pedidos/ConversaSecretaria"
+import { DocumentoPronto } from "@/components/pedidos/DocumentoPronto"
 import { IconeDocumento } from "@/components/pedidos/IconeDocumento"
 import { LinhaDoTempo } from "@/components/pedidos/LinhaDoTempo"
 import { StatusBadge } from "@/components/pedidos/StatusBadge"
@@ -18,7 +20,8 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useAsync } from "@/hooks/useAsync"
 import { formatarDataHora, formatarDiaMes, lerData } from "@/lib/format"
-import { FORMAS_ENTREGA, STATUS, STATUS_FINAIS, cancelar, getSolicitacao, podeCancelar, responderPendencia } from "@/services/secretariaService"
+import { cn } from "@/lib/utils"
+import { FORMAS_ENTREGA, STATUS, STATUS_FINAIS, avaliar, cancelar, getSolicitacao, podeCancelar, responderPendencia } from "@/services/secretariaService"
 
 function detalhesDoPedido(pedido) {
   const itens = [
@@ -60,6 +63,9 @@ export default function PedidoDetalhe() {
 
   const finalizado = STATUS_FINAIS.includes(pedido.status)
   const pendente = pedido.status === STATUS.PENDENTE
+  // documento pronto em PDF (tela 15): a tela mostra o arquivo em vez da linha do tempo
+  const pdfPronto = pedido.status === STATUS.PRONTA && pedido.formaEntrega === "pdf" && pedido.documento
+  const podeAvaliar = pedido.status === STATUS.PRONTA || pedido.status === STATUS.ENTREGUE
 
   async function cancelarPedido() {
     setErro(null)
@@ -68,6 +74,12 @@ export default function PedidoDetalhe() {
     } catch (e) {
       setErro(e.message)
     }
+  }
+
+  async function avaliarAtendimento(nota) {
+    // a estrela acende na hora; o service grava em seguida
+    setPedidoAtualizado({ ...pedido, avaliacao: { nota } })
+    setPedidoAtualizado(await avaliar(pedido.protocolo, nota))
   }
 
   async function responder(resposta) {
@@ -90,15 +102,13 @@ export default function PedidoDetalhe() {
         </InfoBox>
       )}
 
-      {pendente ? (
-        // pendente (tela 14): aviso em destaque e só o nome + status, para sobrar espaço para a conversa
-        <>
-          <AvisoPendencia className="mt-3" />
-          <div className="mt-5 mb-3 flex items-center justify-between gap-3">
-            <h2 className="text-lg leading-snug font-bold">{pedido.tipo.nome}</h2>
-            <StatusBadge status={pedido.status} className="shrink-0" />
-          </div>
-        </>
+      {/* pendente (tela 14) e PDF pronto (tela 15): só nome + status no topo, o resto da tela é a ação */}
+      {pendente && <AvisoPendencia className="mt-3" />}
+      {pendente || pdfPronto ? (
+        <div className={cn("mb-3 flex items-center justify-between gap-3", pendente ? "mt-5" : "mt-3")}>
+          <h2 className="text-lg leading-snug font-bold">{pedido.tipo.nome}</h2>
+          <StatusBadge status={pedido.status} className="shrink-0" />
+        </div>
       ) : (
         <>
           <section className="mt-3 flex items-center gap-3.5 rounded-3xl bg-card p-4 shadow-card">
@@ -113,16 +123,25 @@ export default function PedidoDetalhe() {
         </>
       )}
 
-      <LinhaDoTempo etapas={montarEtapas(pedido)} />
+      {pdfPronto ? <DocumentoPronto pedido={pedido} /> : <LinhaDoTempo etapas={montarEtapas(pedido)} />}
 
-      {pedido.pendencias.length > 0 && (
+      {/* impresso pronto: diz onde e quando retirar */}
+      {pedido.status === STATUS.PRONTA && !pdfPronto && (
+        <InfoBox icone={MapPin} tom="success" className="mt-4">
+          Pronto para retirada na Secretaria Acadêmica (Prédio 1, térreo), de seg. a sex., das 8h às 17h. Leve um
+          documento com foto.
+        </InfoBox>
+      )}
+
+      {pedido.pendencias.length > 0 && !pdfPronto && (
         <ConversaSecretaria mensagens={pedido.pendencias} agora={agora} className="mt-4" />
       )}
 
-      {pendente ? (
-        <CampoResposta onEnviar={responder} className="mt-4" />
-      ) : (
-        <ListaDetalhes className="mt-4" itens={detalhesDoPedido(pedido)} />
+      {pendente && <CampoResposta onEnviar={responder} className="mt-4" />}
+      {!pendente && !pdfPronto && <ListaDetalhes className="mt-4" itens={detalhesDoPedido(pedido)} />}
+
+      {podeAvaliar && (
+        <AvaliacaoAtendimento nota={pedido.avaliacao?.nota} onAvaliar={avaliarAtendimento} className="mt-3" />
       )}
 
       {pedido.status === STATUS.EM_ANALISE && !respondido && (

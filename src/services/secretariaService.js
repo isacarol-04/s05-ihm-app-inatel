@@ -212,3 +212,15 @@ export async function responderPendencia(protocolo, { texto, anexo = null }, ago
   save(CHAVE, solicitacoes)
   return { ...solicitacao, tipo: getTipo(solicitacao.tipoId) }
 }
+
+// nota de 1 a 5 para o atendimento (pode trocar depois)
+export async function avaliar(protocolo, nota, agora = new Date()) {
+  await delay(200)
+  const solicitacoes = lerSolicitacoes()
+  const solicitacao = solicitacoes.find((s) => s.protocolo === protocolo)
+  if (!solicitacao) throw new Error("Pedido não encontrado.")
+
+  solicitacao.avaliacao = { nota, data: agora.toISOString() }
+  save(CHAVE, solicitacoes)
+  return { ...solicitacao, tipo: getTipo(solicitacao.tipoId) }
+}
