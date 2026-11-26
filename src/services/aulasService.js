@@ -1,14 +1,9 @@
 import dados from "@/data/aulas.json"
+import { lerData } from "@/lib/format"
 import { delay } from "./storage"
 
 const { calendario, disciplinas: aulas } = dados
 const DIAS_SEMANA = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
-
-// "2026-11-27" -> Date no fuso local (sem o problema do UTC)
-export function lerData(iso) {
-  const [ano, mes, dia] = iso.split("-").map(Number)
-  return new Date(ano, mes - 1, dia)
-}
 
 function inicioDoDia(data) {
   const copia = new Date(data)

@@ -41,3 +41,31 @@ export async function getResumoPedidos() {
     pendentes: solicitacoes.filter((s) => s.status === STATUS.PENDENTE).length,
   }
 }
+
+// ordem na lista "em andamento": primeiro o que precisa da pessoa
+const PRIORIDADE = {
+  PRONTA: 0,
+  PENDENTE: 1,
+  EM_ANALISE: 2,
+  RECEBIDA: 3,
+}
+
+// separa os pedidos em "em andamento" e "concluídos" (entregues ou cancelados)
+export async function listarPedidos() {
+  const pedidos = await listarSolicitacoes()
+  const finalizado = (pedido) => STATUS_FINAIS.includes(pedido.status)
+
+  return {
+    emAndamento: pedidos
+      .filter((pedido) => !finalizado(pedido))
+      .sort((a, b) => PRIORIDADE[a.status] - PRIORIDADE[b.status] || new Date(b.dataPedido) - new Date(a.dataPedido)),
+    concluidos: pedidos
+      .filter(finalizado)
+      .sort((a, b) => new Date(b.dataPedido) - new Date(a.dataPedido)),
+  }
+}
+
+// data em que o pedido entrou no status atual (último item do histórico)
+export function dataDoStatusAtual(pedido) {
+  return pedido.historico.at(-1)?.data ?? pedido.dataPedido
+}

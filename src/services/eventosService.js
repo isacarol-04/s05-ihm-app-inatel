@@ -1,5 +1,5 @@
 import eventos from "@/data/eventos.json"
-import { lerData } from "./aulasService"
+import { lerData } from "@/lib/format"
 import { delay } from "./storage"
 
 // eventos que ainda vão acontecer, do mais próximo para o mais distante

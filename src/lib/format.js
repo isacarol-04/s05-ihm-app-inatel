@@ -3,6 +3,12 @@
 const MESES_CURTOS = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"]
 const DIAS_CURTOS = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"]
 
+// "2026-11-27" -> Date no fuso local (sem o problema do UTC)
+export function lerData(iso) {
+  const [ano, mes, dia] = iso.split("-").map(Number)
+  return new Date(ano, mes - 1, dia)
+}
+
 export function capitalizar(texto) {
   return texto.charAt(0).toUpperCase() + texto.slice(1)
 }

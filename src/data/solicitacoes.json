@@ -8,9 +8,18 @@
     "dataPedido": "2026-11-24T09:12:00",
     "prazo": "2026-11-25",
     "historico": [
-      { "status": "RECEBIDA", "data": "2026-11-24T09:12:00" },
-      { "status": "EM_ANALISE", "data": "2026-11-24T14:30:00" },
-      { "status": "PRONTA", "data": "2026-11-25T08:05:00" }
+      {
+        "status": "RECEBIDA",
+        "data": "2026-11-24T09:12:00"
+      },
+      {
+        "status": "EM_ANALISE",
+        "data": "2026-11-24T14:30:00"
+      },
+      {
+        "status": "PRONTA",
+        "data": "2026-11-25T08:05:00"
+      }
     ],
     "pendencias": [],
     "documento": {
@@ -30,9 +39,18 @@
     "dataPedido": "2026-11-22T15:40:00",
     "prazo": "2026-11-27",
     "historico": [
-      { "status": "RECEBIDA", "data": "2026-11-22T15:40:00" },
-      { "status": "EM_ANALISE", "data": "2026-11-23T10:05:00" },
-      { "status": "PENDENTE", "data": "2026-11-25T09:20:00" }
+      {
+        "status": "RECEBIDA",
+        "data": "2026-11-22T15:40:00"
+      },
+      {
+        "status": "EM_ANALISE",
+        "data": "2026-11-23T10:05:00"
+      },
+      {
+        "status": "PENDENTE",
+        "data": "2026-11-25T09:20:00"
+      }
     ],
     "pendencias": [
       {
@@ -55,8 +73,75 @@
     "dataPedido": "2026-11-25T08:30:00",
     "prazo": "2026-11-26",
     "historico": [
-      { "status": "RECEBIDA", "data": "2026-11-25T08:30:00" },
-      { "status": "EM_ANALISE", "data": "2026-11-25T11:00:00" }
+      {
+        "status": "RECEBIDA",
+        "data": "2026-11-25T08:30:00"
+      },
+      {
+        "status": "EM_ANALISE",
+        "data": "2026-11-25T11:00:00"
+      }
+    ],
+    "pendencias": [],
+    "documento": null,
+    "avaliacao": null
+  },
+  {
+    "protocolo": "2026-0377",
+    "tipoId": "declaracao-matricula",
+    "finalidade": "Transporte",
+    "formaEntrega": "pdf",
+    "status": "ENTREGUE",
+    "dataPedido": "2026-10-14T10:20:00",
+    "prazo": "2026-10-15",
+    "historico": [
+      {
+        "status": "RECEBIDA",
+        "data": "2026-10-14T10:20:00"
+      },
+      {
+        "status": "EM_ANALISE",
+        "data": "2026-10-14T13:00:00"
+      },
+      {
+        "status": "PRONTA",
+        "data": "2026-10-15T09:10:00"
+      },
+      {
+        "status": "ENTREGUE",
+        "data": "2026-10-15T11:42:00"
+      }
+    ],
+    "pendencias": [],
+    "documento": {
+      "arquivo": "declaracao_matricula.pdf",
+      "tamanhoKb": 118,
+      "codigoValidacao": "2K7P-91LA",
+      "dataEmissao": "2026-10-15T09:10:00"
+    },
+    "avaliacao": {
+      "nota": 5,
+      "comentario": "",
+      "data": "2026-10-15T12:00:00"
+    }
+  },
+  {
+    "protocolo": "2026-0389",
+    "tipoId": "declaracao-conclusao-periodo",
+    "finalidade": "Bolsa",
+    "formaEntrega": "pdf",
+    "status": "CANCELADA",
+    "dataPedido": "2026-11-03T16:05:00",
+    "prazo": "2026-11-05",
+    "historico": [
+      {
+        "status": "RECEBIDA",
+        "data": "2026-11-03T16:05:00"
+      },
+      {
+        "status": "CANCELADA",
+        "data": "2026-11-03T16:30:00"
+      }
     ],
     "pendencias": [],
     "documento": null,

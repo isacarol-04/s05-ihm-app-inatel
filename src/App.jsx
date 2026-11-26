@@ -8,6 +8,7 @@ import EmConstrucao from "@/pages/EmConstrucao"
 import Saiu from "@/pages/Saiu"
 import ReservarArmario from "@/pages/ReservarArmario"
 import ArmarioReserva from "@/pages/ArmarioReserva"
+import MeusPedidos from "@/pages/MeusPedidos"
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Route element={<AppShell semTabBar />}>
         <Route path="servicos/armario" element={<ReservarArmario />} />
         <Route path="servicos/armario/reserva" element={<ArmarioReserva />} />
+        <Route path="secretaria" element={<MeusPedidos />} />
       </Route>
       <Route path="saiu" element={<Saiu />} />
     </Routes>
