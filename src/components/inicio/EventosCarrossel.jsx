@@ -17,8 +17,9 @@ export function EventosCarrossel({ eventos }) {
   const inicioToque = useRef(null)
   const total = eventos.length
 
-  // no tablet cabem 2 eventos por vez; no celular e no desktop (coluna estreita), 1
-  const tablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)")
+  // de 768px até 1279px cabem 2 eventos por vez; no celular e em telas largas
+  // (onde os eventos ficam numa coluna estreita), 1
+  const tablet = useMediaQuery("(min-width: 768px) and (max-width: 1279px)")
   const porTela = tablet ? 2 : 1
   const paginas = Math.max(total - porTela + 1, 1)
   const atual = Math.min(indice, paginas - 1)
@@ -92,7 +93,7 @@ export function EventosCarrossel({ eventos }) {
             {eventos.map((evento, i) => (
               <li
                 key={evento.id}
-                className="w-full shrink-0 px-2 md:w-1/2 lg:w-full"
+                className="w-full shrink-0 px-2 md:w-1/2 xl:w-full"
                 aria-hidden={i < atual || i >= atual + porTela}
                 aria-roledescription="slide"
                 aria-label={`${i + 1} de ${total}`}

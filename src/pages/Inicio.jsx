@@ -30,8 +30,9 @@ export default function Inicio() {
     <>
       <HeaderInicio temNotificacao={data?.avisos.length > 0} />
 
-      <div className="mt-4 lg:mt-2 lg:grid lg:grid-cols-12 lg:gap-10">
-        <div className="space-y-6 lg:col-span-7">
+      {/* duas colunas só em telas largas; até 1279px (iPad Pro, notebook pequeno) fica uma coluna */}
+      <div className="mt-4 lg:mt-2 xl:grid xl:grid-cols-12 xl:gap-10">
+        <div className="space-y-6 xl:col-span-7">
           {loading || !data ? (
             <InicioSkeleton />
           ) : (
@@ -43,7 +44,7 @@ export default function Inicio() {
           )}
         </div>
 
-        <div className="mt-7 space-y-7 lg:col-span-5 lg:mt-0">
+        <div className="mt-7 space-y-7 xl:col-span-5 xl:mt-0">
           <Atalhos />
           {data && <EventosCarrossel eventos={data.eventos} />}
         </div>
