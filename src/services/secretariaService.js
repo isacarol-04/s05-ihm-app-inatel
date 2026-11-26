@@ -184,3 +184,31 @@ export async function cancelar(protocolo, agora = new Date()) {
   save(CHAVE, solicitacoes)
   return { ...solicitacao, tipo: getTipo(solicitacao.tipoId) }
 }
+
+// Resposta da pessoa a uma pendência: a conversa ganha a mensagem dela,
+// a pendência fica resolvida e o pedido volta para "em análise".
+export async function responderPendencia(protocolo, { texto, anexo = null }, agora = new Date()) {
+  await delay(500)
+  const solicitacoes = lerSolicitacoes()
+  const solicitacao = solicitacoes.find((s) => s.protocolo === protocolo)
+  if (!solicitacao) throw new Error("Pedido não encontrado.")
+  if (solicitacao.status !== STATUS.PENDENTE) throw new Error("Esse pedido não está esperando resposta.")
+
+  const data = agora.toISOString()
+  solicitacao.pendencias.forEach((mensagem) => {
+    mensagem.resolvida = true
+  })
+  solicitacao.pendencias.push({
+    id: solicitacao.pendencias.length + 1,
+    autor: "aluno",
+    texto,
+    anexo,
+    data,
+    resolvida: true,
+  })
+  solicitacao.status = STATUS.EM_ANALISE
+  solicitacao.historico.push({ status: STATUS.EM_ANALISE, data })
+
+  save(CHAVE, solicitacoes)
+  return { ...solicitacao, tipo: getTipo(solicitacao.tipoId) }
+}

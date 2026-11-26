@@ -52,6 +52,17 @@ export function formatarDataHora(data) {
   return `${formatarDiaMes(data)} às ${formatarHora(data)}`
 }
 
+// quanto tempo faz: "agora", "há 5 min", "há 2 horas", "ontem", "há 3 dias"
+export function formatarTempoRelativo(data, agora = new Date()) {
+  const minutos = Math.round((agora - new Date(data)) / 60000)
+  if (minutos < 1) return "agora"
+  if (minutos < 60) return `há ${minutos} min`
+  const horas = Math.floor(minutos / 60)
+  if (horas < 24) return horas === 1 ? "há 1 hora" : `há ${horas} horas`
+  const dias = Math.floor(horas / 24)
+  return dias === 1 ? "ontem" : `há ${dias} dias`
+}
+
 // Date -> { dia: "12", mes: "MAI" }
 export function separarDiaMes(data) {
   return { dia: String(data.getDate()).padStart(2, "0"), mes: MESES_CURTOS[data.getMonth()] }

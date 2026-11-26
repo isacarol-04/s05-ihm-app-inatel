@@ -33,6 +33,12 @@ export function montarEtapas(pedido) {
     }
   })
 
+  // pendente: o foco é a resposta, então a linha para aqui (igual ao Figma)
+  if (pedido.status === "PENDENTE") {
+    passadas.at(-1).descricao = "Aguardando sua resposta"
+    return passadas
+  }
+
   if (STATUS_FINAIS.includes(pedido.status)) return passadas
 
   const proximas = ["RECEBIDA", "EM_ANALISE", "PRONTA"]

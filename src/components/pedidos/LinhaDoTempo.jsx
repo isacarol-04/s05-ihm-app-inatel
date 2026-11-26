@@ -14,6 +14,11 @@ function Marcador({ estado, tom }) {
     return <span className="relative z-10 size-5 shrink-0 rounded-full border-2 border-border bg-card" />
   }
 
+  // pendente: anel laranja vazado (esperando a pessoa)
+  if (estado === "atual" && tom === "warning") {
+    return <span className="relative z-10 size-5 shrink-0 rounded-full border-[5px] border-warning bg-card ring-4 ring-warning-soft" />
+  }
+
   const Icone = tom === "danger" ? X : Check
   const mostrarIcone = estado === "feito" || tom === "success" || tom === "danger"
 
@@ -55,7 +60,15 @@ export function LinhaDoTempo({ etapas, className }) {
             )}
             <Marcador estado={etapa.estado} tom={etapa.tom} />
             <div className="-mt-0.5 min-w-0">
-              <p className={cn("text-[15px] font-bold", futuro && "font-semibold text-subtle")}>{etapa.titulo}</p>
+              <p
+                className={cn(
+                  "text-[15px] font-bold",
+                  futuro && "font-semibold text-subtle",
+                  etapa.estado === "atual" && etapa.tom === "warning" && "text-warning"
+                )}
+              >
+                {etapa.titulo}
+              </p>
               <p className="text-xs text-muted-foreground">{etapa.descricao}</p>
             </div>
           </li>
