@@ -25,6 +25,9 @@ export default function ReservarArmario() {
   const [enviando, setEnviando] = useState(false)
   const [erro, setErro] = useState(null)
   const [confirmarDevolucao, setConfirmarDevolucao] = useState(false)
+  // número guardado ao abrir a confirmação: a reserva some ao devolver, mas o texto
+  // do diálogo continua aparecendo enquanto ele fecha
+  const [armarioDevolvido, setArmarioDevolvido] = useState(null)
 
   // recarrega as quantidades quando muda a acessibilidade
   const carregarDisponiveis = useCallback(() => getDisponiveis(acessivel), [acessivel])
@@ -65,7 +68,14 @@ export default function ReservarArmario() {
             <Button variant="outline" className="h-9 bg-card" nativeButton={false} render={<Link to="/servicos/armario/reserva" />}>
               Ver reserva
             </Button>
-            <Button variant="outline" className="h-9 bg-card" onClick={() => setConfirmarDevolucao(true)}>
+            <Button
+              variant="outline"
+              className="h-9 bg-card"
+              onClick={() => {
+                setArmarioDevolvido(reservaAtual.armarioId)
+                setConfirmarDevolucao(true)
+              }}
+            >
               <Undo2 /> Devolver
             </Button>
           </span>
@@ -130,7 +140,7 @@ export default function ReservarArmario() {
         onAbertoChange={setConfirmarDevolucao}
         icone={Undo2}
         titulo="Devolver o armário?"
-        descricao={`Confirme só depois de entregar a chave do armário ${reservaAtual?.armarioId} no almoxarifado.`}
+        descricao={`Confirme só depois de entregar a chave do armário ${armarioDevolvido} no almoxarifado.`}
         textoConfirmar="Já devolvi"
         onConfirmar={devolverAtual}
       />
