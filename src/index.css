@@ -5,6 +5,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* celulares com tela baixa (iPhone SE, Android pequeno) */
+@custom-variant tela-baixa (@media (max-height: 700px));
+
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: 'Plus Jakarta Sans Variable', sans-serif;

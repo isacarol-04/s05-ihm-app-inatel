@@ -3,8 +3,8 @@ import { InatelLogo } from "@/components/brand/InatelLogo"
 import { Button } from "@/components/ui/button"
 import { useTheme } from "@/hooks/useTheme"
 
-export function HeaderInicio({ onTrocarTema, temNotificacao = false }) {
-  const { tema } = useTheme()
+export function HeaderInicio({ temNotificacao = false }) {
+  const { tema, abrirSeletor } = useTheme()
   const IconeTema = tema === "dark" ? Sun : Moon
 
   return (
@@ -13,7 +13,7 @@ export function HeaderInicio({ onTrocarTema, temNotificacao = false }) {
       <InatelLogo className="h-7 lg:invisible" />
 
       <div className="flex items-center gap-2.5">
-        <Button variant="surface" size="icon-xl" aria-label="Trocar tema" onClick={onTrocarTema}>
+        <Button variant="surface" size="icon-xl" aria-label="Trocar tema" onClick={abrirSeletor}>
           <IconeTema />
         </Button>
         <Button variant="surface" size="icon-xl" aria-label="Notificações" className="relative">
