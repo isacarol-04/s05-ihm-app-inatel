@@ -1,0 +1,42 @@
+[
+  {
+    "id": "declaracao-matricula",
+    "nome": "Declaração de matrícula",
+    "avisoPronto": "Declaração pronta",
+    "descricao": "Comprova que você está matriculado no período atual.",
+    "prazoDias": 1,
+    "taxa": 0,
+    "formatos": ["pdf"],
+    "palavrasChave": ["estágio", "comprovante", "vínculo", "transporte"]
+  },
+  {
+    "id": "historico-escolar",
+    "nome": "Histórico escolar",
+    "avisoPronto": "Histórico pronto",
+    "descricao": "Todas as disciplinas cursadas, notas e frequência.",
+    "prazoDias": 3,
+    "taxa": 15,
+    "formatos": ["pdf", "impresso"],
+    "palavrasChave": ["notas", "intercâmbio", "transferência"]
+  },
+  {
+    "id": "declaracao-horario",
+    "nome": "Declaração de horário",
+    "avisoPronto": "Declaração pronta",
+    "descricao": "Mostra os dias e horários das suas aulas no período.",
+    "prazoDias": 1,
+    "taxa": 0,
+    "formatos": ["pdf"],
+    "palavrasChave": ["estágio", "trabalho", "grade"]
+  },
+  {
+    "id": "declaracao-conclusao-periodo",
+    "nome": "Declaração de conclusão de período",
+    "avisoPronto": "Declaração pronta",
+    "descricao": "Comprova que você concluiu o período anterior.",
+    "prazoDias": 2,
+    "taxa": 0,
+    "formatos": ["pdf"],
+    "palavrasChave": ["bolsa", "comprovante"]
+  }
+]

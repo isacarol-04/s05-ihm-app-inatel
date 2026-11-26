@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "codigo": "S05",
+    "disciplina": "Interface Homem-Máquina",
+    "horarios": [
+      { "dia": 2, "inicio": "10:00", "fim": "11:40", "local": "P1-S17" },
+      { "dia": 4, "inicio": "10:00", "fim": "11:40", "local": "P1-S17" }
+    ],
+    "faltas": 10,
+    "limiteFaltas": 25,
+    "nota": 10,
+    "prova": null
+  },
+  {
+    "id": 2,
+    "codigo": "E01",
+    "disciplina": "Circuitos Elétricos em CC",
+    "horarios": [
+      { "dia": 2, "inicio": "13:30", "fim": "15:10", "local": "Lab. CS&I" },
+      { "dia": 3, "inicio": "10:00", "fim": "11:40", "local": "P1-S05" }
+    ],
+    "faltas": 2,
+    "limiteFaltas": 25,
+    "nota": 5,
+    "prova": "14/11"
+  },
+  {
+    "id": 3,
+    "codigo": "M02",
+    "disciplina": "Álgebra e Geometria Analítica",
+    "horarios": [
+      { "dia": 1, "inicio": "08:00", "fim": "09:40", "local": "P1-S12" },
+      { "dia": 2, "inicio": "08:00", "fim": "09:40", "local": "P1-S12" },
+      { "dia": 5, "inicio": "08:00", "fim": "09:40", "local": "P1-S12" }
+    ],
+    "faltas": 4,
+    "limiteFaltas": 25,
+    "nota": 7,
+    "prova": "12/11"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  { "id": 1, "formato": "padrao", "disponivel": true, "acessivel": false },
+  { "id": 2, "formato": "padrao", "disponivel": true, "acessivel": false },
+  { "id": 3, "formato": "padrao", "disponivel": false, "acessivel": false },
+  { "id": 4, "formato": "padrao", "disponivel": true, "acessivel": true },
+  { "id": 5, "formato": "padrao", "disponivel": false, "acessivel": true },
+  { "id": 6, "formato": "padrao", "disponivel": true, "acessivel": false },
+  { "id": 7, "formato": "padrao", "disponivel": true, "acessivel": false },
+  { "id": 8, "formato": "duplo", "disponivel": true, "acessivel": true },
+  { "id": 9, "formato": "duplo", "disponivel": false, "acessivel": true },
+  { "id": 10, "formato": "duplo", "disponivel": true, "acessivel": false },
+  { "id": 11, "formato": "padrao", "disponivel": true, "acessivel": false },
+  { "id": 12, "formato": "padrao", "disponivel": false, "acessivel": false }
+]

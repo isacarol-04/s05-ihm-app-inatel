@@ -1,0 +1,13 @@
+{
+  "nome": "Ana Clara",
+  "nomeCompleto": "Ana Clara Souza",
+  "matricula": "123456",
+  "curso": "Engenharia de Software",
+  "cursoAbreviado": "Eng. de Software",
+  "periodo": 3,
+  "email": "ana.clara@ges.inatel.br",
+  "acessibilidade": false,
+  "pendencias": {
+    "financeiro": true
+  }
+}

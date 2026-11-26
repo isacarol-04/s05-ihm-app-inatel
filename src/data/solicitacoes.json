@@ -1,0 +1,65 @@
+[
+  {
+    "protocolo": "2026-0412",
+    "tipoId": "declaracao-matricula",
+    "finalidade": "Estágio",
+    "formaEntrega": "pdf",
+    "status": "PRONTA",
+    "dataPedido": "2026-11-24T09:12:00",
+    "prazo": "2026-11-25",
+    "historico": [
+      { "status": "RECEBIDA", "data": "2026-11-24T09:12:00" },
+      { "status": "EM_ANALISE", "data": "2026-11-24T14:30:00" },
+      { "status": "PRONTA", "data": "2026-11-25T08:05:00" }
+    ],
+    "pendencias": [],
+    "documento": {
+      "arquivo": "declaracao_matricula.pdf",
+      "tamanhoKb": 120,
+      "codigoValidacao": "8F3K-22QD",
+      "dataEmissao": "2026-11-25T08:05:00"
+    },
+    "avaliacao": null
+  },
+  {
+    "protocolo": "2026-0398",
+    "tipoId": "historico-escolar",
+    "finalidade": "Intercâmbio",
+    "formaEntrega": "pdf",
+    "status": "PENDENTE",
+    "dataPedido": "2026-11-22T15:40:00",
+    "prazo": "2026-11-27",
+    "historico": [
+      { "status": "RECEBIDA", "data": "2026-11-22T15:40:00" },
+      { "status": "EM_ANALISE", "data": "2026-11-23T10:05:00" },
+      { "status": "PENDENTE", "data": "2026-11-25T09:20:00" }
+    ],
+    "pendencias": [
+      {
+        "id": 1,
+        "autor": "secretaria",
+        "texto": "Olá! Você quer o histórico com as notas do período atual ou só dos períodos já concluídos?",
+        "data": "2026-11-25T09:20:00",
+        "resolvida": false
+      }
+    ],
+    "documento": null,
+    "avaliacao": null
+  },
+  {
+    "protocolo": "2026-0420",
+    "tipoId": "declaracao-horario",
+    "finalidade": "Trabalho",
+    "formaEntrega": "pdf",
+    "status": "EM_ANALISE",
+    "dataPedido": "2026-11-25T08:30:00",
+    "prazo": "2026-11-26",
+    "historico": [
+      { "status": "RECEBIDA", "data": "2026-11-25T08:30:00" },
+      { "status": "EM_ANALISE", "data": "2026-11-25T11:00:00" }
+    ],
+    "pendencias": [],
+    "documento": null,
+    "avaliacao": null
+  }
+]
