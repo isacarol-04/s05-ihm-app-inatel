@@ -14,9 +14,9 @@ const infoBoxVariants = cva("flex items-start gap-2.5 rounded-xl px-3.5 py-3 tex
   defaultVariants: { tom: "info" },
 })
 
-export function InfoBox({ icone: Icone, tom, className, children }) {
+export function InfoBox({ icone: Icone, tom, className, children, ...props }) {
   return (
-    <div className={cn(infoBoxVariants({ tom }), className)}>
+    <div className={cn(infoBoxVariants({ tom }), className)} {...props}>
       {Icone && <Icone aria-hidden />}
       <p>{children}</p>
     </div>

@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 // Chama uma função assíncrona (os services) e guarda o resultado,
 // o carregamento e o erro. A função precisa ser estável (definida fora
 // do componente ou com useCallback), senão a busca roda em todo render.
+// "recarregar" busca de novo (ex.: depois de devolver um armário).
 export function useAsync(funcao) {
   const [estado, setEstado] = useState({ data: null, loading: true, error: null })
+  const [versao, setVersao] = useState(0)
 
   useEffect(() => {
     let ativo = true
@@ -16,7 +18,9 @@ export function useAsync(funcao) {
     return () => {
       ativo = false
     }
-  }, [funcao])
+  }, [funcao, versao])
 
-  return estado
+  const recarregar = useCallback(() => setVersao((v) => v + 1), [])
+
+  return { ...estado, recarregar }
 }

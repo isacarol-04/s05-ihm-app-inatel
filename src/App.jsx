@@ -6,6 +6,8 @@ import Servicos from "@/pages/Servicos"
 import Perfil from "@/pages/Perfil"
 import EmConstrucao from "@/pages/EmConstrucao"
 import Saiu from "@/pages/Saiu"
+import ReservarArmario from "@/pages/ReservarArmario"
+import ArmarioReserva from "@/pages/ArmarioReserva"
 
 function App() {
   return (
@@ -16,6 +18,11 @@ function App() {
         <Route path="servicos" element={<Servicos />} />
         <Route path="perfil" element={<Perfil />} />
         <Route path="*" element={<EmConstrucao />} />
+      </Route>
+      {/* telas internas: cabeçalho com voltar e sem a barra de baixo */}
+      <Route element={<AppShell semTabBar />}>
+        <Route path="servicos/armario" element={<ReservarArmario />} />
+        <Route path="servicos/armario/reserva" element={<ArmarioReserva />} />
       </Route>
       <Route path="saiu" element={<Saiu />} />
     </Routes>
