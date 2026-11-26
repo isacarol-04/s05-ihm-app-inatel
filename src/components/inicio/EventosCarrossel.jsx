@@ -61,13 +61,26 @@ export function EventosCarrossel({ eventos }) {
         id="eventos-titulo"
         titulo="Eventos"
         acao={
-          <Link to="/eventos" className="rounded text-sm font-semibold text-primary hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
-            Ver todos
-          </Link>
+          <div className="flex items-center gap-3">
+            {/* setas só onde tem mouse; no celular é arrastando o card */}
+            {paginas > 1 && (
+              <div className="hidden items-center gap-1.5 md:flex">
+                <Button variant="surface" size="icon-lg" className="rounded-full" aria-label="Evento anterior" onClick={anterior}>
+                  <ChevronLeft />
+                </Button>
+                <Button variant="surface" size="icon-lg" className="rounded-full" aria-label="Próximo evento" onClick={proximo}>
+                  <ChevronRight />
+                </Button>
+              </div>
+            )}
+            <Link to="/eventos" className="rounded text-sm font-semibold text-primary hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
+              Ver todos
+            </Link>
+          </div>
         }
       />
 
-      <div className="group relative">
+      <div>
         {/* o padding extra é só para a sombra do card não ser cortada */}
         <div className="-m-2 overflow-hidden py-2">
           <ul
@@ -89,26 +102,6 @@ export function EventosCarrossel({ eventos }) {
             ))}
           </ul>
         </div>
-
-        {/* setas só aparecem onde tem mouse; no celular é arrastando */}
-        <Button
-          variant="surface"
-          size="icon-lg"
-          aria-label="Evento anterior"
-          onClick={anterior}
-          className="absolute top-[75px] left-3 hidden -translate-y-1/2 rounded-full opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 md:inline-flex"
-        >
-          <ChevronLeft />
-        </Button>
-        <Button
-          variant="surface"
-          size="icon-lg"
-          aria-label="Próximo evento"
-          onClick={proximo}
-          className="absolute top-[75px] right-3 hidden -translate-y-1/2 rounded-full opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 md:inline-flex"
-        >
-          <ChevronRight />
-        </Button>
       </div>
 
       <div className="mt-4 flex justify-center gap-1.5">
