@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { ChevronLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { CabecalhoFixo } from "./CabecalhoFixo"
 
 // cabeçalho das telas internas: botão de voltar redondo + título
 // "voltarPara" é usado quando a pessoa chegou direto pela URL (sem histórico)
@@ -13,12 +14,14 @@ export function HeaderInterno({ titulo, voltarPara = "/", acao }) {
   }
 
   return (
-    <header className="flex items-center gap-3.5 py-2">
-      <Button variant="surface" size="icon-xl" aria-label="Voltar" onClick={voltar}>
-        <ChevronLeft />
-      </Button>
-      <h1 className="flex-1 truncate text-lg font-bold lg:text-[30px] lg:leading-tight lg:tracking-tight">{titulo}</h1>
-      {acao}
-    </header>
+    <CabecalhoFixo>
+      <header className="flex items-center gap-3.5 py-2">
+        <Button variant="surface" size="icon-xl" aria-label="Voltar" onClick={voltar}>
+          <ChevronLeft />
+        </Button>
+        <h1 className="flex-1 truncate text-lg font-bold lg:text-[30px] lg:leading-tight lg:tracking-tight">{titulo}</h1>
+        {acao}
+      </header>
+    </CabecalhoFixo>
   )
 }

@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Bell, CircleHelp, LogOut, Moon, User } from "lucide-react"
-import { ColunaCentral } from "@/components/layout/ColunaCentral"
 import { PageHeader } from "@/components/layout/PageHeader"
 import { AjudaPainel } from "@/components/perfil/AjudaPainel"
 import { DadosPessoaisPainel } from "@/components/perfil/DadosPessoaisPainel"
@@ -47,8 +46,7 @@ export default function Perfil() {
 
   return (
     <>
-      {/* tela de configurações: mesma coluna central das telas de tarefa */}
-      <ColunaCentral>
+      <div>
         <PageHeader titulo="Perfil" />
 
         <div className="mt-4 space-y-4">
@@ -70,7 +68,7 @@ export default function Perfil() {
             <MenuItem icone={LogOut} label="Sair da conta" tom="danger" semSeta onClick={() => setPainel("sair")} />
           </MenuLista>
         </div>
-      </ColunaCentral>
+      </div>
 
       {usuario && (
         <>
