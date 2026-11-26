@@ -15,7 +15,7 @@ export function SeletorDias({ dias, selecionado, onSelecionar }) {
             aria-label={`${dia.rotulo} ${dia.numero}${dia.hoje ? ", hoje" : ""}`}
             onClick={() => onSelecionar(dia.data)}
             className={cn(
-              "relative flex h-14 flex-col items-center justify-center rounded-2xl border bg-card leading-tight transition-colors outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring md:h-16",
+              "relative flex h-14 flex-col items-center justify-center rounded-2xl border bg-card leading-tight transition-all outline-none hover:bg-muted active:scale-95 focus-visible:ring-2 focus-visible:ring-ring md:h-16",
               ativo && "border-primary bg-primary text-primary-foreground hover:bg-primary"
             )}
           >

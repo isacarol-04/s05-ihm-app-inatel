@@ -5,6 +5,7 @@ import Aulas from "@/pages/Aulas"
 import Servicos from "@/pages/Servicos"
 import Perfil from "@/pages/Perfil"
 import EmConstrucao from "@/pages/EmConstrucao"
+import Saiu from "@/pages/Saiu"
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="perfil" element={<Perfil />} />
         <Route path="*" element={<EmConstrucao />} />
       </Route>
+      <Route path="saiu" element={<Saiu />} />
     </Routes>
   )
 }

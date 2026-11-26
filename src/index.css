@@ -182,6 +182,25 @@
     @apply font-sans;
     -webkit-tap-highlight-color: transparent;
   }
+  /* o Tailwind 4 tirou a mãozinha dos botões; aqui ela volta para tudo que é clicável */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"],
+  label:has(input, button) {
+    cursor: pointer;
+  }
+}
+
+/* quem pede menos movimento no sistema vê os painéis só aparecendo, sem deslizar */
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="sheet-content"],
+  [data-slot="dialog-content"],
+  [data-slot="alert-dialog-content"] {
+    translate: none !important;
+    scale: none !important;
+    transition-property: opacity !important;
+    animation-name: none !important;
+  }
 }
 
 @utility scrollbar-none {

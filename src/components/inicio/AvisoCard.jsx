@@ -17,7 +17,7 @@ export function AvisoCard({ aviso, className }) {
     <Link
       to={aviso.para}
       className={cn(
-        "flex items-center gap-3 rounded-2xl bg-card p-4 shadow-card transition-colors hover:bg-muted/60 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+        "flex items-center gap-3 rounded-2xl bg-card p-4 shadow-card transition-all hover:bg-muted/60 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
         className
       )}
     >

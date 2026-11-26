@@ -7,7 +7,13 @@
   "periodo": 3,
   "email": "ana.clara@ges.inatel.br",
   "acessibilidade": false,
+  "telefone": "(35) 99876-5432",
   "pendencias": {
     "financeiro": true
+  },
+  "notificacoes": {
+    "secretaria": true,
+    "aulas": true,
+    "eventos": false
   }
 }

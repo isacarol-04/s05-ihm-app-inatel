@@ -22,7 +22,7 @@ export function ProximaAulaCard({ proxima, agora }) {
     <Link
       to="/aulas"
       aria-label={`Próxima aula: ${aula.codigo} ${aula.disciplina}, ${quando}`}
-      className="block rounded-3xl bg-linear-135 from-primary to-primary-strong p-5 text-primary-foreground shadow-card transition-transform focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.99]"
+      className="block rounded-3xl bg-linear-135 from-primary to-primary-strong p-5 text-primary-foreground shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.99]"
     >
       <div className="flex items-center justify-between gap-3">
         <Chip>{quando === "agora" ? "Aula agora" : "Próxima aula"}</Chip>

@@ -8,7 +8,7 @@ export function TemaOpcao({ tema, selecionado }) {
   return (
     <label
       className={cn(
-        "flex cursor-pointer flex-col gap-2.5 rounded-2xl border bg-card p-2.5 tela-baixa:gap-2 tela-baixa:p-2 md:gap-3 md:p-3 transition-colors hover:bg-muted/50 has-focus-visible:ring-2 has-focus-visible:ring-ring",
+        "flex cursor-pointer flex-col gap-2.5 rounded-2xl border bg-card p-2.5 tela-baixa:gap-2 tela-baixa:p-2 md:gap-3 md:p-3 transition-all hover:bg-muted/50 active:scale-[0.98] has-focus-visible:ring-2 has-focus-visible:ring-ring",
         selecionado && "border-primary ring-1 ring-primary hover:bg-card"
       )}
     >
