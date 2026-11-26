@@ -27,3 +27,17 @@ export async function listarSolicitacoes() {
     tipo: getTipo(solicitacao.tipoId),
   }))
 }
+
+// pedidos que já terminaram (não aparecem em "em andamento")
+export const STATUS_FINAIS = [STATUS.ENTREGUE, STATUS.CANCELADA]
+
+// para o card de Serviços: "3 pedidos em andamento · 1 pronto"
+export async function getResumoPedidos() {
+  await delay()
+  const solicitacoes = lerSolicitacoes()
+  return {
+    emAndamento: solicitacoes.filter((s) => !STATUS_FINAIS.includes(s.status)).length,
+    prontos: solicitacoes.filter((s) => s.status === STATUS.PRONTA).length,
+    pendentes: solicitacoes.filter((s) => s.status === STATUS.PENDENTE).length,
+  }
+}

@@ -31,3 +31,12 @@ export async function getReservaAtual() {
   await delay()
   return lerReservaAtual()
 }
+
+// para o card de Serviços: reserva atual (se tiver) e quantos armários estão livres
+export async function getResumoArmario() {
+  await delay()
+  return {
+    reserva: lerReservaAtual(),
+    disponiveis: lerArmarios().filter((armario) => armario.disponivel).length,
+  }
+}
