@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { Clock, MapPin } from "lucide-react"
-import { formatarNota } from "@/services/aulasService"
-import { formatarTempoAte } from "@/lib/format"
+import { formatarNota, lerData, provaPendente } from "@/services/aulasService"
+import { formatarDiaMes, formatarTempoAte } from "@/lib/format"
 import { cn } from "@/lib/utils"
 
 function Chip({ children, className }) {
@@ -46,7 +46,9 @@ export function ProximaAulaCard({ proxima, agora }) {
           Faltas {aula.faltas}/{aula.limiteFaltas}
         </Chip>
         <Chip>CR {formatarNota(aula.nota)}</Chip>
-        {aula.prova && <Chip className="bg-card text-primary">Prova {aula.prova}</Chip>}
+        {provaPendente(aula, agora) && (
+          <Chip className="bg-card text-primary">Prova {formatarDiaMes(lerData(aula.prova))}</Chip>
+        )}
       </div>
     </Link>
   )

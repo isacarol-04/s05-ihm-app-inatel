@@ -23,7 +23,7 @@
     "faltas": 2,
     "limiteFaltas": 25,
     "nota": 5,
-    "prova": "14/11"
+    "prova": "2026-12-01"
   },
   {
     "id": 3,
@@ -37,6 +37,6 @@
     "faltas": 4,
     "limiteFaltas": 25,
     "nota": 7,
-    "prova": "12/11"
+    "prova": "2026-11-27"
   }
 ]
