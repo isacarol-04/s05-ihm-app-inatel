@@ -166,3 +166,21 @@ export async function criarSolicitacao({ tipoId, finalidade, formaEntrega, anexo
   save(CHAVE, [solicitacao, ...solicitacoes])
   return { ...solicitacao, tipo }
 }
+
+// só dá para cancelar enquanto a secretaria ainda não começou a analisar
+export function podeCancelar(pedido) {
+  return pedido.status === STATUS.RECEBIDA
+}
+
+export async function cancelar(protocolo, agora = new Date()) {
+  await delay(400)
+  const solicitacoes = lerSolicitacoes()
+  const solicitacao = solicitacoes.find((s) => s.protocolo === protocolo)
+  if (!solicitacao) throw new Error("Pedido não encontrado.")
+  if (!podeCancelar(solicitacao)) throw new Error("Esse pedido já está em análise e não pode mais ser cancelado pelo app.")
+
+  solicitacao.status = STATUS.CANCELADA
+  solicitacao.historico.push({ status: STATUS.CANCELADA, data: agora.toISOString() })
+  save(CHAVE, solicitacoes)
+  return { ...solicitacao, tipo: getTipo(solicitacao.tipoId) }
+}

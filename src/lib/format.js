@@ -47,6 +47,11 @@ export function formatarDiaMes(data) {
   return new Date(data).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })
 }
 
+// "10/11 às 09:12"
+export function formatarDataHora(data) {
+  return `${formatarDiaMes(data)} às ${formatarHora(data)}`
+}
+
 // Date -> { dia: "12", mes: "MAI" }
 export function separarDiaMes(data) {
   return { dia: String(data.getDate()).padStart(2, "0"), mes: MESES_CURTOS[data.getMonth()] }

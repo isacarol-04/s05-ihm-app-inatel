@@ -33,13 +33,14 @@ export function ConfirmarDialog({
           <AlertDialogTitle>{titulo}</AlertDialogTitle>
           <AlertDialogDescription>{descricao}</AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel size="xl" className="sm:flex-1">
+        {/* botões lado a lado como no Figma: "manter" (seguro) à esquerda, ação destrutiva à direita */}
+        <AlertDialogFooter className="flex-row gap-2.5">
+          <AlertDialogCancel variant="soft" size="xl" className="min-w-0 flex-1 px-3">
             {textoCancelar}
           </AlertDialogCancel>
           <AlertDialogAction
             size="xl"
-            className="bg-destructive text-white hover:bg-destructive/90 sm:flex-1"
+            className="min-w-0 flex-1 bg-destructive px-3 text-white hover:bg-destructive/90"
             onClick={onConfirmar}
           >
             {textoConfirmar}
