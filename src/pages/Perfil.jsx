@@ -38,7 +38,7 @@ export default function Perfil() {
   function restaurar() {
     restaurarDadosDeExemplo()
     // recarrega para todas as telas lerem os dados de exemplo de novo
-    window.location.assign("/")
+    window.location.assign(import.meta.env.BASE_URL)
   }
 
   const notificacoesAtivas = usuario && Object.values(usuario.notificacoes).some(Boolean)

@@ -3,7 +3,7 @@ import { FileText, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // protótipo: todo documento pronto baixa o mesmo PDF de exemplo (fica em public/)
-const PDF_EXEMPLO = "/documento-exemplo.pdf"
+const PDF_EXEMPLO = `${import.meta.env.BASE_URL}documento-exemplo.pdf`
 
 // "folha" desenhada só com blocos, imitando a primeira página do PDF
 function PreviaFolha() {
