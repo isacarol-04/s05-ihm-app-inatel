@@ -9,6 +9,8 @@ import Saiu from "@/pages/Saiu"
 import ReservarArmario from "@/pages/ReservarArmario"
 import ArmarioReserva from "@/pages/ArmarioReserva"
 import MeusPedidos from "@/pages/MeusPedidos"
+import NovoPedido from "@/pages/NovoPedido"
+import PedidoEnviado from "@/pages/PedidoEnviado"
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="servicos/armario" element={<ReservarArmario />} />
         <Route path="servicos/armario/reserva" element={<ArmarioReserva />} />
         <Route path="secretaria" element={<MeusPedidos />} />
+        <Route path="secretaria/novo" element={<NovoPedido />} />
+        <Route path="secretaria/pedidos/:protocolo/enviado" element={<PedidoEnviado />} />
       </Route>
       <Route path="saiu" element={<Saiu />} />
     </Routes>

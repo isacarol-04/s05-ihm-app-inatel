@@ -9,6 +9,23 @@ export function lerData(iso) {
   return new Date(ano, mes - 1, dia)
 }
 
+// Date -> "2026-11-27" (no fuso local)
+export function paraDataIso(data) {
+  const mes = String(data.getMonth() + 1).padStart(2, "0")
+  const dia = String(data.getDate()).padStart(2, "0")
+  return `${data.getFullYear()}-${mes}-${dia}`
+}
+
+// "1 dia útil", "3 dias úteis"
+export function formatarDiasUteis(dias) {
+  return dias === 1 ? "1 dia útil" : `${dias} dias úteis`
+}
+
+// 15 -> "R$ 15,00"
+export function formatarMoeda(valor) {
+  return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
+}
+
 export function capitalizar(texto) {
   return texto.charAt(0).toUpperCase() + texto.slice(1)
 }

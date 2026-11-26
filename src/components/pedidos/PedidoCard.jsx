@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom"
-import { ChevronRight, FileText } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 import { formatarDiaMes, lerData } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { dataDoStatusAtual } from "@/services/secretariaService"
+import { IconeDocumento } from "./IconeDocumento"
 import { StatusBadge } from "./StatusBadge"
 
 // texto à direita do status: o que a pessoa precisa saber/fazer agora
@@ -35,14 +36,7 @@ export function PedidoCard({ pedido }) {
       )}
     >
       <div className="flex items-center gap-3.5">
-        <span
-          className={cn(
-            "flex size-12 shrink-0 items-center justify-center rounded-2xl",
-            finalizado ? "bg-muted text-subtle" : "bg-accent text-primary"
-          )}
-        >
-          <FileText className="size-5" />
-        </span>
+        <IconeDocumento apagado={finalizado} />
         <div className="min-w-0 flex-1">
           <h3 className="truncate text-base font-bold">{pedido.tipo.nome}</h3>
           <p className="text-[13px] text-muted-foreground">Protocolo #{pedido.protocolo}</p>
