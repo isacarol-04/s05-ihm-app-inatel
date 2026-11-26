@@ -61,7 +61,8 @@ export default function Servicos() {
     <>
       <PageHeader titulo="Serviços" descricao="Resolva sua vida no campus pelo app." />
 
-      <div className="mt-4 grid gap-4 md:grid-cols-2 md:gap-5 xl:max-w-5xl">
+      {/* sem painel lateral: aqui os dois serviços são o conteúdo todo, então usam a largura inteira */}
+      <div className="mt-4 grid gap-4 md:grid-cols-2 md:gap-5">
         <ServicoCard
           icone={Columns2}
           titulo="Armário"

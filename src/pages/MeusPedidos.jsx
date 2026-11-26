@@ -38,7 +38,7 @@ export default function MeusPedidos() {
   const [aba, setAba] = useState("andamento")
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div>
       <HeaderInterno titulo="Secretaria" voltarPara="/servicos" />
 
       <Button size="xl" className="mt-3 w-full" nativeButton={false} render={<Link to="/secretaria/novo" />}>

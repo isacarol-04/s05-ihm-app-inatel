@@ -1,10 +1,11 @@
 import { useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
-import { Check, Columns2 } from "lucide-react"
+import { Columns2 } from "lucide-react"
 import { CardReserva } from "@/components/armario/CardReserva"
 import { RegrasPainel } from "@/components/armario/RegrasPainel"
 import { HeaderInterno } from "@/components/layout/HeaderInterno"
 import { RodapeAcoes } from "@/components/layout/RodapeAcoes"
+import { IconeSucesso } from "@/components/shared/IconeSucesso"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useAsync } from "@/hooks/useAsync"
@@ -20,7 +21,7 @@ export default function ArmarioReserva() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-xl">
+      <div>
         <HeaderInterno titulo="Armário" voltarPara="/servicos" />
         <Skeleton className="mt-8 h-72 rounded-3xl" />
       </div>
@@ -29,7 +30,7 @@ export default function ArmarioReserva() {
 
   if (!reserva) {
     return (
-      <div className="mx-auto max-w-xl">
+      <div>
         <HeaderInterno titulo="Armário" voltarPara="/servicos" />
         <section className="mt-10 flex flex-col items-center text-center">
           <span className="flex size-20 items-center justify-center rounded-full bg-muted text-subtle">
@@ -50,15 +51,11 @@ export default function ArmarioReserva() {
   const atrasada = new Date(reserva.devolverAte) < agora
 
   return (
-    <div className="mx-auto max-w-xl">
+    <div>
       <HeaderInterno titulo="Armário" voltarPara="/servicos" />
 
       <section className="mt-6 flex flex-col items-center text-center">
-        {nova && (
-          <span className="flex size-20 items-center justify-center rounded-full bg-success-soft text-success animate-in zoom-in-50 fade-in duration-500">
-            <Check className="size-10" strokeWidth={2.5} />
-          </span>
-        )}
+        {nova && <IconeSucesso />}
         <h2 className="mt-4 text-2xl font-bold">{nova ? "Armário reservado!" : "Sua reserva"}</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           {atrasada

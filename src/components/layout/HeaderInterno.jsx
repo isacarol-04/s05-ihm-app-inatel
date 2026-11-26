@@ -17,7 +17,7 @@ export function HeaderInterno({ titulo, voltarPara = "/", acao }) {
       <Button variant="surface" size="icon-xl" aria-label="Voltar" onClick={voltar}>
         <ChevronLeft />
       </Button>
-      <h1 className="flex-1 truncate text-lg font-bold">{titulo}</h1>
+      <h1 className="flex-1 truncate text-lg font-bold lg:text-[30px] lg:leading-tight lg:tracking-tight">{titulo}</h1>
       {acao}
     </header>
   )

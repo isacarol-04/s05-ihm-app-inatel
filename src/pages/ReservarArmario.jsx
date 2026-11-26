@@ -53,7 +53,7 @@ export default function ReservarArmario() {
   }
 
   return (
-    <div className="mx-auto max-w-xl">
+    <div>
       <HeaderInterno titulo="Reservar armário" voltarPara="/servicos" />
 
       {reservaAtual && (
