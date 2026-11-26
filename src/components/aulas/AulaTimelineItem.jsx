@@ -2,17 +2,13 @@ import { CalendarDays, MapPin } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { formatarDiaMes } from "@/lib/format"
 import { cn } from "@/lib/utils"
-import {
-  corDasFaltas,
-  corDoCR,
-  formatarNota,
-  lerData,
-  provaPendente,
-} from "@/services/aulasService"
+import { corDasFaltas, corDoCR, formatarNota, proximaProva } from "@/services/aulasService"
 
 // uma linha da grade do dia: horário à esquerda e o card da aula à direita
 export function AulaTimelineItem({ item, proxima, agora }) {
   const { aula, horario } = item
+  // conta a partir do dia da aula mostrada (numa semana futura não aparece prova que já terá passado)
+  const prova = proximaProva(aula, item.inicio > agora ? item.inicio : agora)
 
   return (
     <li className="grid grid-cols-[52px_1fr] gap-3 md:grid-cols-[64px_1fr] md:gap-4">
@@ -47,9 +43,9 @@ export function AulaTimelineItem({ item, proxima, agora }) {
           <Badge variant={corDoCR(aula.nota)} size="lg">
             CR {formatarNota(aula.nota)}
           </Badge>
-          {provaPendente(aula, agora) && (
+          {prova && (
             <Badge variant="danger" size="lg">
-              <CalendarDays /> Prova {formatarDiaMes(lerData(aula.prova))}
+              <CalendarDays /> {prova.descricao} {formatarDiaMes(prova.data)}
             </Badge>
           )}
         </div>

@@ -1,42 +1,100 @@
-[
-  {
-    "id": 1,
-    "codigo": "S05",
-    "disciplina": "Interface Homem-Máquina",
-    "horarios": [
-      { "dia": 2, "inicio": "10:00", "fim": "11:40", "local": "P1-S17" },
-      { "dia": 4, "inicio": "10:00", "fim": "11:40", "local": "P1-S17" }
-    ],
-    "faltas": 10,
-    "limiteFaltas": 25,
-    "nota": 10,
-    "prova": null
+{
+  "calendario": {
+    "inicio": "2026-11-23",
+    "fim": "2026-12-11"
   },
-  {
-    "id": 2,
-    "codigo": "E01",
-    "disciplina": "Circuitos Elétricos em CC",
-    "horarios": [
-      { "dia": 2, "inicio": "13:30", "fim": "15:10", "local": "Lab. CS&I" },
-      { "dia": 3, "inicio": "10:00", "fim": "11:40", "local": "P1-S05" }
-    ],
-    "faltas": 2,
-    "limiteFaltas": 25,
-    "nota": 5,
-    "prova": "2026-12-01"
-  },
-  {
-    "id": 3,
-    "codigo": "M02",
-    "disciplina": "Álgebra e Geometria Analítica",
-    "horarios": [
-      { "dia": 1, "inicio": "08:00", "fim": "09:40", "local": "P1-S12" },
-      { "dia": 2, "inicio": "08:00", "fim": "09:40", "local": "P1-S12" },
-      { "dia": 5, "inicio": "08:00", "fim": "09:40", "local": "P1-S12" }
-    ],
-    "faltas": 4,
-    "limiteFaltas": 25,
-    "nota": 7,
-    "prova": "2026-11-27"
-  }
-]
+  "disciplinas": [
+    {
+      "id": 1,
+      "codigo": "S05",
+      "disciplina": "Interface Homem-Máquina",
+      "horarios": [
+        { "dia": 2, "inicio": "10:00", "fim": "11:40", "local": "P1-S17" },
+        { "dia": 4, "inicio": "10:00", "fim": "11:40", "local": "P1-S17" }
+      ],
+      "faltas": 10,
+      "limiteFaltas": 25,
+      "nota": 10,
+      "provas": [
+        { "data": "2026-12-08", "descricao": "Projeto final" }
+      ]
+    },
+    {
+      "id": 2,
+      "codigo": "E01",
+      "disciplina": "Circuitos Elétricos em CC",
+      "horarios": [
+        { "dia": 2, "inicio": "13:30", "fim": "15:10", "local": "Lab. CS&I" },
+        { "dia": 3, "inicio": "10:00", "fim": "11:40", "local": "P1-S05" }
+      ],
+      "faltas": 2,
+      "limiteFaltas": 25,
+      "nota": 5,
+      "provas": [
+        { "data": "2026-12-01", "descricao": "NP2" },
+        { "data": "2026-12-09", "descricao": "NP3" }
+      ]
+    },
+    {
+      "id": 3,
+      "codigo": "M02",
+      "disciplina": "Álgebra e Geometria Analítica",
+      "horarios": [
+        { "dia": 1, "inicio": "08:00", "fim": "09:40", "local": "P1-S12" },
+        { "dia": 2, "inicio": "08:00", "fim": "09:40", "local": "P1-S12" },
+        { "dia": 5, "inicio": "08:00", "fim": "09:40", "local": "P1-S12" }
+      ],
+      "faltas": 4,
+      "limiteFaltas": 25,
+      "nota": 7,
+      "provas": [
+        { "data": "2026-11-27", "descricao": "NP2" }
+      ]
+    },
+    {
+      "id": 4,
+      "codigo": "S06",
+      "disciplina": "Banco de Dados",
+      "horarios": [
+        { "dia": 1, "inicio": "10:00", "fim": "11:40", "local": "Lab. 12" },
+        { "dia": 3, "inicio": "13:30", "fim": "15:10", "local": "Lab. 12" }
+      ],
+      "faltas": 14,
+      "limiteFaltas": 25,
+      "nota": 8.5,
+      "provas": [
+        { "data": "2026-12-02", "descricao": "NP2" }
+      ]
+    },
+    {
+      "id": 5,
+      "codigo": "M04",
+      "disciplina": "Cálculo II",
+      "horarios": [
+        { "dia": 4, "inicio": "08:00", "fim": "09:40", "local": "P1-S08" },
+        { "dia": 5, "inicio": "10:00", "fim": "11:40", "local": "P1-S08" }
+      ],
+      "faltas": 20,
+      "limiteFaltas": 25,
+      "nota": 6.5,
+      "provas": [
+        { "data": "2026-12-04", "descricao": "NP2" }
+      ]
+    },
+    {
+      "id": 6,
+      "codigo": "S02",
+      "disciplina": "Programação Orientada a Objetos",
+      "horarios": [
+        { "dia": 1, "inicio": "13:30", "fim": "15:10", "local": "Lab. 03" },
+        { "dia": 4, "inicio": "13:30", "fim": "15:10", "local": "Lab. 03" }
+      ],
+      "faltas": 6,
+      "limiteFaltas": 25,
+      "nota": 9,
+      "provas": [
+        { "data": "2026-12-03", "descricao": "NP2" }
+      ]
+    }
+  ]
+}

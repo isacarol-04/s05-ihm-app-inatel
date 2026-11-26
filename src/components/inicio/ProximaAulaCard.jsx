@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { Clock, MapPin } from "lucide-react"
-import { formatarNota, lerData, provaPendente } from "@/services/aulasService"
+import { formatarNota, proximaProva } from "@/services/aulasService"
 import { formatarDiaMes, formatarTempoAte } from "@/lib/format"
 import { cn } from "@/lib/utils"
 
@@ -16,6 +16,7 @@ export function ProximaAulaCard({ proxima, agora }) {
   if (!proxima) return null
   const { aula, horario, inicio, fim } = proxima
   const quando = formatarTempoAte(inicio, fim, agora)
+  const prova = proximaProva(aula, agora)
 
   return (
     <Link
@@ -46,8 +47,10 @@ export function ProximaAulaCard({ proxima, agora }) {
           Faltas {aula.faltas}/{aula.limiteFaltas}
         </Chip>
         <Chip>CR {formatarNota(aula.nota)}</Chip>
-        {provaPendente(aula, agora) && (
-          <Chip className="bg-card text-primary">Prova {formatarDiaMes(lerData(aula.prova))}</Chip>
+        {prova && (
+          <Chip className="bg-card text-primary">
+            {prova.descricao} {formatarDiaMes(prova.data)}
+          </Chip>
         )}
       </div>
     </Link>

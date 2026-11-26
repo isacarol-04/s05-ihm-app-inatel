@@ -4,11 +4,18 @@ import { AulaTimelineItem } from "@/components/aulas/AulaTimelineItem"
 import { ProvasSemana } from "@/components/aulas/ProvasSemana"
 import { ResumoCard } from "@/components/aulas/ResumoCard"
 import { SeletorDias } from "@/components/aulas/SeletorDias"
+import { SeletorSemana } from "@/components/aulas/SeletorSemana"
 import { PageHeader } from "@/components/layout/PageHeader"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useAsync } from "@/hooks/useAsync"
-import { getAulasDoDia, getProvas, getProximaAula, getSemana } from "@/services/aulasService"
+import {
+  getAulasDoDia,
+  getProvas,
+  getProximaAula,
+  getSemanas,
+  indiceDaSemanaAtual,
+} from "@/services/aulasService"
 
 function nomeDoDia(data) {
   const nome = data.toLocaleDateString("pt-BR", { weekday: "long" }).replace("-feira", "")
@@ -19,27 +26,39 @@ function plural(n, singular, pluralTexto) {
   return `${n} ${n === 1 ? singular : pluralTexto}`
 }
 
+// dia que abre ao entrar numa semana: hoje, se estiver nela, senão a segunda
+function diaInicialDa(semana) {
+  return (semana.find((dia) => dia.hoje) ?? semana[0]).data
+}
+
 export default function Aulas() {
   const [agora] = useState(() => new Date())
-  const [dias] = useState(() => getSemana(agora))
-  const diaInicial = dias.find((dia) => dia.hoje)?.data ?? dias[0].data
-  const [diaSelecionado, setDiaSelecionado] = useState(diaInicial)
+  const [semanas] = useState(() => getSemanas(agora))
+  const indiceAtual = indiceDaSemanaAtual(semanas, agora)
+
+  const [indiceSemana, setIndiceSemana] = useState(indiceAtual)
+  const [diaSelecionado, setDiaSelecionado] = useState(() => diaInicialDa(semanas[indiceAtual]))
+  const semana = semanas[indiceSemana]
+  const ehSemanaAtual = indiceSemana === indiceAtual
+
+  function irParaSemana(indice) {
+    setIndiceSemana(indice)
+    setDiaSelecionado(diaInicialDa(semanas[indice]))
+  }
 
   const carregarDia = useCallback(() => getAulasDoDia(diaSelecionado), [diaSelecionado])
-  const carregarSemana = useCallback(
-    () =>
-      Promise.all([getProximaAula(agora), getProvas(agora, dias[4].data)]).then(([proxima, provas]) => ({
-        proxima,
-        provas,
-      })),
-    [agora, dias]
-  )
+  const carregarProxima = useCallback(() => getProximaAula(agora), [agora])
+  // provas da semana escolhida que ainda não passaram
+  const carregarProvas = useCallback(() => {
+    const inicio = semana[0].data > agora ? semana[0].data : agora
+    return getProvas(inicio, semana[4].data)
+  }, [semana, agora])
 
   const { data: aulasDoDia, loading } = useAsync(carregarDia)
-  const { data: semana } = useAsync(carregarSemana)
+  const { data: proxima } = useAsync(carregarProxima)
+  const { data: provas } = useAsync(carregarProvas)
 
   const ehHoje = diaSelecionado.toDateString() === agora.toDateString()
-  const proxima = semana?.proxima
   const ehProxima = (item) =>
     proxima && item.aula.id === proxima.aula.id && item.inicio.getTime() === proxima.inicio.getTime()
 
@@ -48,15 +67,23 @@ export default function Aulas() {
       <PageHeader
         titulo="Aulas"
         acao={
-          <Button variant="surface" size="icon-xl" aria-label="Voltar para hoje" onClick={() => setDiaSelecionado(diaInicial)}>
+          <Button variant="surface" size="icon-xl" aria-label="Voltar para hoje" onClick={() => irParaSemana(indiceAtual)}>
             <CalendarDays />
           </Button>
         }
       />
 
-      <div className="mt-4 grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px] xl:gap-x-10">
-        <div className="xl:col-start-1">
-          <SeletorDias dias={dias} selecionado={diaSelecionado} onSelecionar={setDiaSelecionado} />
+      <div className="mt-3 grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px] xl:gap-x-10">
+        <div className="space-y-2 xl:col-start-1">
+          <SeletorSemana
+            semana={semana}
+            atual={ehSemanaAtual}
+            podeVoltar={indiceSemana > 0}
+            podeAvancar={indiceSemana < semanas.length - 1}
+            onVoltar={() => irParaSemana(indiceSemana - 1)}
+            onAvancar={() => irParaSemana(indiceSemana + 1)}
+          />
+          <SeletorDias dias={semana} selecionado={diaSelecionado} onSelecionar={setDiaSelecionado} />
         </div>
 
         {/* no celular os resumos ficam lado a lado; em telas largas vão para a coluna da direita */}
@@ -70,10 +97,10 @@ export default function Aulas() {
           <ResumoCard
             icone={TriangleAlert}
             tom="danger"
-            valor={semana ? plural(semana.provas.length, "prova", "provas") : "–"}
-            legenda="nesta semana"
+            valor={provas ? plural(provas.length, "prova", "provas") : "–"}
+            legenda={ehSemanaAtual ? "nesta semana" : "nessa semana"}
           />
-          {semana && <ProvasSemana provas={semana.provas} agora={agora} className="mt-4 hidden xl:block" />}
+          {provas && <ProvasSemana provas={provas} agora={agora} className="mt-4 hidden xl:block" />}
         </aside>
 
         <section aria-label="Aulas do dia" className="xl:col-start-1">

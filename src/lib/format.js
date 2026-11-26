@@ -24,10 +24,9 @@ export function formatarDiaMes(data) {
   return new Date(data).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })
 }
 
-// "12/05" -> { dia: "12", mes: "MAI" }
-export function separarDiaMes(ddmm) {
-  const [dia, mes] = ddmm.split("/")
-  return { dia, mes: MESES_CURTOS[Number(mes) - 1] }
+// Date -> { dia: "12", mes: "MAI" }
+export function separarDiaMes(data) {
+  return { dia: String(data.getDate()).padStart(2, "0"), mes: MESES_CURTOS[data.getMonth()] }
 }
 
 function mesmoDia(a, b) {
