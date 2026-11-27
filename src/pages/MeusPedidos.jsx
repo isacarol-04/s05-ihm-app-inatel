@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAsync } from "@/hooks/useAsync"
-import { listarPedidos } from "@/services/secretariaService"
+import { listarPedidos, observarSolicitacoes } from "@/services/secretariaService"
 
 function ListaPedidos({ pedidos, vazio }) {
   if (pedidos.length === 0) {
@@ -34,7 +34,7 @@ function ListaPedidos({ pedidos, vazio }) {
 }
 
 export default function MeusPedidos() {
-  const { data } = useAsync(listarPedidos)
+  const { data } = useAsync(listarPedidos, observarSolicitacoes)
   const [aba, setAba] = useState("andamento")
 
   return (

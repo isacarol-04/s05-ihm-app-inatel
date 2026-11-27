@@ -21,7 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { useAsync } from "@/hooks/useAsync"
 import { formatarDataHora, formatarDiaMes, lerData } from "@/lib/format"
 import { cn } from "@/lib/utils"
-import { FORMAS_ENTREGA, STATUS, STATUS_FINAIS, avaliar, cancelar, getSolicitacao, podeCancelar, responderPendencia } from "@/services/secretariaService"
+import { FORMAS_ENTREGA, STATUS, STATUS_FINAIS, avaliar, cancelar, getSolicitacao, observarSolicitacoes, podeCancelar, responderPendencia } from "@/services/secretariaService"
 
 function detalhesDoPedido(pedido) {
   const itens = [
@@ -39,10 +39,7 @@ function detalhesDoPedido(pedido) {
 export default function PedidoDetalhe() {
   const { protocolo } = useParams()
   const carregar = useCallback(() => getSolicitacao(protocolo), [protocolo])
-  const { data, loading } = useAsync(carregar)
-  // depois de cancelar, a tela mostra o pedido atualizado sem buscar de novo
-  const [pedidoAtualizado, setPedidoAtualizado] = useState(null)
-  const pedido = pedidoAtualizado ?? data
+  const { data: pedido, loading, atualizar, recarregar } = useAsync(carregar, observarSolicitacoes)
   const [confirmando, setConfirmando] = useState(false)
   const [respondido, setRespondido] = useState(false)
   const [erro, setErro] = useState(null)
@@ -70,22 +67,29 @@ export default function PedidoDetalhe() {
   async function cancelarPedido() {
     setErro(null)
     try {
-      setPedidoAtualizado(await cancelar(pedido.protocolo))
+      atualizar(await cancelar(pedido.protocolo))
     } catch (e) {
       setErro(e.message)
+      recarregar()
     }
   }
 
   async function avaliarAtendimento(nota) {
     // a estrela acende na hora; o service grava em seguida
-    setPedidoAtualizado({ ...pedido, avaliacao: { nota } })
-    setPedidoAtualizado(await avaliar(pedido.protocolo, nota))
+    setErro(null)
+    atualizar({ ...pedido, avaliacao: { nota } })
+    try {
+      atualizar(await avaliar(pedido.protocolo, nota))
+    } catch (e) {
+      setErro(e.message)
+      recarregar()
+    }
   }
 
   async function responder(resposta) {
     setErro(null)
     try {
-      setPedidoAtualizado(await responderPendencia(pedido.protocolo, resposta))
+      atualizar(await responderPendencia(pedido.protocolo, resposta))
       setRespondido(true)
     } catch (e) {
       setErro(e.message)
@@ -96,7 +100,7 @@ export default function PedidoDetalhe() {
     <>
       <HeaderInterno titulo={`Pedido #${pedido.protocolo}`} voltarPara="/secretaria" />
 
-      {respondido && (
+      {respondido && pedido.status === STATUS.EM_ANALISE && (
         <InfoBox icone={CircleCheck} tom="success" className="mt-3" role="status">
           Resposta enviada! A secretaria volta a analisar o seu pedido.
         </InfoBox>

@@ -4,6 +4,48 @@ import { paraDataIso } from "@/lib/format"
 import { delay, load, save } from "./storage"
 
 const CHAVE = "solicitacoes"
+const TEMPO_PARA_ANALISE = 20_000
+const TEMPO_EM_ANALISE = 15_000
+const observadores = new Set()
+let intervalo = null
+
+function avisarAtualizacao() {
+  observadores.forEach((atualizar) => atualizar())
+}
+
+function salvarSolicitacoes(solicitacoes) {
+  save(CHAVE, solicitacoes)
+  avisarAtualizacao()
+}
+
+function verificarAndamento() {
+  lerSolicitacoes()
+}
+
+function sincronizarEntreAbas(evento) {
+  if (evento.key === "app-inatel:solicitacoes" || evento.key === null) avisarAtualizacao()
+}
+
+// As telas acompanham o mesmo processamento. O relógio só roda enquanto
+// há uma tela inscrita; ao voltar ou recarregar, as datas recuperam o avanço.
+export function observarSolicitacoes(atualizar) {
+  observadores.add(atualizar)
+  if (observadores.size === 1) {
+    intervalo = setInterval(verificarAndamento, 1000)
+    window.addEventListener("focus", verificarAndamento)
+    window.addEventListener("storage", sincronizarEntreAbas)
+  }
+
+  return () => {
+    observadores.delete(atualizar)
+    if (observadores.size === 0) {
+      clearInterval(intervalo)
+      intervalo = null
+      window.removeEventListener("focus", verificarAndamento)
+      window.removeEventListener("storage", sincronizarEntreAbas)
+    }
+  }
+}
 
 // status possíveis de uma solicitação (igual ao diagrama de classes)
 export const STATUS = {
@@ -19,8 +61,42 @@ export function getTipo(tipoId) {
   return tiposDocumento.find((tipo) => tipo.id === tipoId)
 }
 
-export function lerSolicitacoes() {
-  return load(CHAVE, solicitacoesIniciais)
+export function lerSolicitacoes(agora = new Date()) {
+  const solicitacoes = load(CHAVE, solicitacoesIniciais)
+  let mudou = false
+
+  solicitacoes.forEach((solicitacao) => {
+    // Os exemplos continuam nos seus estados originais. Nesta etapa,
+    // apenas pedidos em PDF criados ou retomados pelo usuário avançam.
+    if (solicitacao.formaEntrega !== "pdf") return
+
+    while (
+      solicitacao.simulacao?.atualizarEm &&
+      new Date(solicitacao.simulacao.atualizarEm) <= agora &&
+      [STATUS.RECEBIDA, STATUS.EM_ANALISE].includes(solicitacao.status)
+    ) {
+      const data = solicitacao.simulacao.atualizarEm
+      if (solicitacao.status === STATUS.RECEBIDA) {
+        solicitacao.status = STATUS.EM_ANALISE
+        solicitacao.simulacao.atualizarEm = new Date(new Date(data).getTime() + TEMPO_EM_ANALISE).toISOString()
+      } else {
+        solicitacao.status = STATUS.PRONTA
+        solicitacao.simulacao = null
+        // Usa o mesmo arquivo de exemplo que o botão de download já oferece.
+        solicitacao.documento = {
+          arquivo: "documento-exemplo.pdf",
+          tamanhoKb: 2,
+          codigoValidacao: "EXEMPLO",
+          dataEmissao: data,
+        }
+      }
+      solicitacao.historico.push({ status: solicitacao.status, data })
+      mudou = true
+    }
+  })
+
+  if (mudou) salvarSolicitacoes(solicitacoes)
+  return solicitacoes
 }
 
 export async function listarSolicitacoes() {
@@ -146,7 +222,7 @@ export async function criarSolicitacao({ tipoId, finalidade, formaEntrega, anexo
   if (!tipo) throw new Error("Documento não encontrado.")
   if (!tipo.formatos.includes(formaEntrega)) throw new Error("Esse documento não está disponível nessa forma de entrega.")
 
-  const solicitacoes = lerSolicitacoes()
+  const solicitacoes = lerSolicitacoes(agora)
   const dataPedido = agora.toISOString()
   const solicitacao = {
     protocolo: proximoProtocolo(solicitacoes, agora.getFullYear()),
@@ -161,9 +237,12 @@ export async function criarSolicitacao({ tipoId, finalidade, formaEntrega, anexo
     pendencias: [],
     documento: null,
     avaliacao: null,
+    simulacao: formaEntrega === "pdf"
+      ? { atualizarEm: new Date(agora.getTime() + TEMPO_PARA_ANALISE).toISOString() }
+      : null,
   }
 
-  save(CHAVE, [solicitacao, ...solicitacoes])
+  salvarSolicitacoes([solicitacao, ...solicitacoes])
   return { ...solicitacao, tipo }
 }
 
@@ -174,14 +253,15 @@ export function podeCancelar(pedido) {
 
 export async function cancelar(protocolo, agora = new Date()) {
   await delay(400)
-  const solicitacoes = lerSolicitacoes()
+  const solicitacoes = lerSolicitacoes(agora)
   const solicitacao = solicitacoes.find((s) => s.protocolo === protocolo)
   if (!solicitacao) throw new Error("Pedido não encontrado.")
   if (!podeCancelar(solicitacao)) throw new Error("Esse pedido já está em análise e não pode mais ser cancelado pelo app.")
 
   solicitacao.status = STATUS.CANCELADA
+  solicitacao.simulacao = null
   solicitacao.historico.push({ status: STATUS.CANCELADA, data: agora.toISOString() })
-  save(CHAVE, solicitacoes)
+  salvarSolicitacoes(solicitacoes)
   return { ...solicitacao, tipo: getTipo(solicitacao.tipoId) }
 }
 
@@ -189,7 +269,8 @@ export async function cancelar(protocolo, agora = new Date()) {
 // a pendência fica resolvida e o pedido volta para "em análise".
 export async function responderPendencia(protocolo, { texto, anexo = null }, agora = new Date()) {
   await delay(500)
-  const solicitacoes = lerSolicitacoes()
+  if (!texto?.trim()) throw new Error("Escreva uma resposta para a secretaria.")
+  const solicitacoes = lerSolicitacoes(agora)
   const solicitacao = solicitacoes.find((s) => s.protocolo === protocolo)
   if (!solicitacao) throw new Error("Pedido não encontrado.")
   if (solicitacao.status !== STATUS.PENDENTE) throw new Error("Esse pedido não está esperando resposta.")
@@ -201,15 +282,18 @@ export async function responderPendencia(protocolo, { texto, anexo = null }, ago
   solicitacao.pendencias.push({
     id: solicitacao.pendencias.length + 1,
     autor: "aluno",
-    texto,
+    texto: texto.trim(),
     anexo,
     data,
     resolvida: true,
   })
   solicitacao.status = STATUS.EM_ANALISE
   solicitacao.historico.push({ status: STATUS.EM_ANALISE, data })
+  solicitacao.simulacao = solicitacao.formaEntrega === "pdf"
+    ? { atualizarEm: new Date(agora.getTime() + TEMPO_EM_ANALISE).toISOString() }
+    : null
 
-  save(CHAVE, solicitacoes)
+  salvarSolicitacoes(solicitacoes)
   return { ...solicitacao, tipo: getTipo(solicitacao.tipoId) }
 }
 
@@ -221,6 +305,6 @@ export async function avaliar(protocolo, nota, agora = new Date()) {
   if (!solicitacao) throw new Error("Pedido não encontrado.")
 
   solicitacao.avaliacao = { nota, data: agora.toISOString() }
-  save(CHAVE, solicitacoes)
+  salvarSolicitacoes(solicitacoes)
   return { ...solicitacao, tipo: getTipo(solicitacao.tipoId) }
 }
