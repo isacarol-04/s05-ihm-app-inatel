@@ -28,7 +28,7 @@ export default function Inicio() {
 
   return (
     <>
-      <HeaderInicio />
+      <HeaderInicio temNotificacao={data?.avisos.length > 0} />
 
       {/* duas colunas só em telas largas; até 1279px (iPad Pro, notebook pequeno) fica uma coluna */}
       <div className="mt-4 lg:mt-2 xl:grid xl:grid-cols-12 xl:gap-10">
