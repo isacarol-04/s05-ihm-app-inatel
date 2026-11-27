@@ -5,6 +5,7 @@ import { load, save } from "./storage"
 
 const CHAVE = "notificacoes"
 const observadores = new Set()
+const observadoresDeNovas = new Set()
 
 function avisarAtualizacao() {
   observadores.forEach((atualizar) => atualizar())
@@ -21,6 +22,13 @@ export function observarNotificacoes(atualizar) {
     observadores.delete(atualizar)
     if (observadores.size === 0) window.removeEventListener("storage", sincronizarEntreAbas)
   }
+}
+
+// Só avisa sobre novas mensagens; abrir, ler ou apagar o histórico não
+// dispara novamente a notificação temporária.
+export function observarNovasNotificacoes(aoReceber) {
+  observadoresDeNovas.add(aoReceber)
+  return () => observadoresDeNovas.delete(aoReceber)
 }
 
 function idDaAtualizacao(protocolo, etapa) {
@@ -99,6 +107,7 @@ export function registrarAtualizacoes(anteriores, atuais) {
   if (novas.length > 0) {
     save(CHAVE, [...novas, ...notificacoes])
     avisarAtualizacao()
+    observadoresDeNovas.forEach((aoReceber) => aoReceber(novas))
   }
 }
 

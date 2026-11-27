@@ -13,29 +13,33 @@ import NovoPedido from "@/pages/NovoPedido"
 import PedidoEnviado from "@/pages/PedidoEnviado"
 import PedidoDetalhe from "@/pages/PedidoDetalhe"
 import Notificacoes from "@/pages/Notificacoes"
+import { NotificacaoFlutuante } from "@/components/inicio/NotificacaoFlutuante"
 
 function App() {
   return (
-    <Routes>
-      <Route element={<AppShell />}>
-        <Route index element={<Inicio />} />
-        <Route path="aulas" element={<Aulas />} />
-        <Route path="servicos" element={<Servicos />} />
-        <Route path="perfil" element={<Perfil />} />
-        <Route path="*" element={<EmConstrucao />} />
-      </Route>
-      {/* telas internas: cabeçalho com voltar e sem a barra de baixo */}
-      <Route element={<AppShell semTabBar />}>
-        <Route path="notificacoes" element={<Notificacoes />} />
-        <Route path="servicos/armario" element={<ReservarArmario />} />
-        <Route path="servicos/armario/reserva" element={<ArmarioReserva />} />
-        <Route path="secretaria" element={<MeusPedidos />} />
-        <Route path="secretaria/novo" element={<NovoPedido />} />
-        <Route path="secretaria/pedidos/:protocolo" element={<PedidoDetalhe />} />
-        <Route path="secretaria/pedidos/:protocolo/enviado" element={<PedidoEnviado />} />
-      </Route>
-      <Route path="saiu" element={<Saiu />} />
-    </Routes>
+    <>
+      <NotificacaoFlutuante />
+      <Routes>
+        <Route element={<AppShell />}>
+          <Route index element={<Inicio />} />
+          <Route path="aulas" element={<Aulas />} />
+          <Route path="servicos" element={<Servicos />} />
+          <Route path="perfil" element={<Perfil />} />
+          <Route path="*" element={<EmConstrucao />} />
+        </Route>
+        {/* telas internas: cabeçalho com voltar e sem a barra de baixo */}
+        <Route element={<AppShell semTabBar />}>
+          <Route path="notificacoes" element={<Notificacoes />} />
+          <Route path="servicos/armario" element={<ReservarArmario />} />
+          <Route path="servicos/armario/reserva" element={<ArmarioReserva />} />
+          <Route path="secretaria" element={<MeusPedidos />} />
+          <Route path="secretaria/novo" element={<NovoPedido />} />
+          <Route path="secretaria/pedidos/:protocolo" element={<PedidoDetalhe />} />
+          <Route path="secretaria/pedidos/:protocolo/enviado" element={<PedidoEnviado />} />
+        </Route>
+        <Route path="saiu" element={<Saiu />} />
+      </Routes>
+    </>
   )
 }
 
