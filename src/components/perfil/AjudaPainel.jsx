@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 
 const CONTATOS = [
   { icone: Clock, texto: "Atendimento presencial: seg. a sex., das 8h às 17h" },
-  { icone: MapPin, texto: "Secretaria Acadêmica – Prédio 1, térreo" },
+  { icone: MapPin, texto: "Secretaria Acadêmica – Prédio 1, segundo andar" },
   { icone: Mail, texto: "secretaria@inatel.br" },
 ]
 

@@ -144,7 +144,7 @@ export default function PedidoDetalhe() {
       {/* impresso pronto: diz onde e quando retirar */}
       {retiradaDisponivel && (
         <InfoBox icone={MapPin} tom="success" className="mt-4">
-          Pronto para retirada na Secretaria Acadêmica (Prédio 1, térreo), de seg. a sex., das 8h às 17h. Leve um
+          Pronto para retirada na Secretaria Acadêmica (Prédio 1, segundo andar), de seg. a sex., das 8h às 17h. Leve um
           documento com foto.
         </InfoBox>
       )}

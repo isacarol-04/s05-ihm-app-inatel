@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 
 const REGRAS = [
   "A reserva vale por 24 horas a partir do momento em que você reserva.",
-  "A chave é retirada e devolvida no almoxarifado, no Prédio 1.",
+  "A chave é retirada e devolvida no almoxarifado, no 3.",
   "Não guarde alimentos, líquidos abertos ou objetos de valor.",
   "Devolver com atraso bloqueia novas reservas por 7 dias.",
   "Você pode ter só um armário reservado por vez.",
