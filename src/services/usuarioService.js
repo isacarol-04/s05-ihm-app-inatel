@@ -14,7 +14,12 @@ export async function getUsuario() {
 
 export async function atualizarNotificacoes(notificacoes) {
   await delay(150)
-  const usuario = { ...lerUsuario(), notificacoes }
+  const anterior = lerUsuario()
+  const usuario = { ...anterior, notificacoes }
+  // Reativar não envia mudanças ocorridas enquanto os avisos estavam desligados.
+  if (!anterior.notificacoes.secretaria && notificacoes.secretaria) {
+    usuario.notificacoesSecretariaAtivadasEm = new Date().toISOString()
+  }
   save(CHAVE, usuario)
   return usuario
 }

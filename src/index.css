@@ -195,6 +195,7 @@
 @media (prefers-reduced-motion: reduce) {
   [data-slot="sheet-content"],
   [data-slot="dialog-content"],
+  [data-slot="popover-content"],
   [data-slot="alert-dialog-content"] {
     translate: none !important;
     scale: none !important;

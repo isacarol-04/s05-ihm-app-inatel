@@ -12,6 +12,7 @@ import MeusPedidos from "@/pages/MeusPedidos"
 import NovoPedido from "@/pages/NovoPedido"
 import PedidoEnviado from "@/pages/PedidoEnviado"
 import PedidoDetalhe from "@/pages/PedidoDetalhe"
+import Notificacoes from "@/pages/Notificacoes"
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       </Route>
       {/* telas internas: cabeçalho com voltar e sem a barra de baixo */}
       <Route element={<AppShell semTabBar />}>
+        <Route path="notificacoes" element={<Notificacoes />} />
         <Route path="servicos/armario" element={<ReservarArmario />} />
         <Route path="servicos/armario/reserva" element={<ArmarioReserva />} />
         <Route path="secretaria" element={<MeusPedidos />} />

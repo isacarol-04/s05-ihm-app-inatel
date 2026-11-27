@@ -2,6 +2,7 @@ import { useState } from "react"
 import { HeaderInicio } from "@/components/layout/HeaderInicio"
 import { Atalhos } from "@/components/inicio/Atalhos"
 import { AvisosLista } from "@/components/inicio/AvisosLista"
+import { CentralNotificacoes } from "@/components/inicio/CentralNotificacoes"
 import { EventosCarrossel } from "@/components/inicio/EventosCarrossel"
 import { InicioSkeleton } from "@/components/inicio/InicioSkeleton"
 import { ProximaAulaCard } from "@/components/inicio/ProximaAulaCard"
@@ -11,6 +12,7 @@ import { getProximaAula } from "@/services/aulasService"
 import { getAvisos } from "@/services/avisosService"
 import { getEventos } from "@/services/eventosService"
 import { getUsuario } from "@/services/usuarioService"
+import { observarSolicitacoes } from "@/services/secretariaService"
 
 async function carregarInicio() {
   const [usuario, avisos, proximaAula, eventos] = await Promise.all([
@@ -23,12 +25,12 @@ async function carregarInicio() {
 }
 
 export default function Inicio() {
-  const { data, loading } = useAsync(carregarInicio)
+  const { data, loading } = useAsync(carregarInicio, observarSolicitacoes)
   const [agora] = useState(() => new Date())
 
   return (
     <>
-      <HeaderInicio temNotificacao={data?.avisos.length > 0} />
+      <HeaderInicio notificacoes={<CentralNotificacoes />} />
 
       {/* duas colunas só em telas largas; até 1279px (iPad Pro, notebook pequeno) fica uma coluna */}
       <div className="mt-4 lg:mt-2 xl:grid xl:grid-cols-12 xl:gap-10">

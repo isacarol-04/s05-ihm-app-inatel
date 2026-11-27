@@ -6,7 +6,7 @@ import { InfoBox } from "@/components/shared/InfoBox"
 import { useAsync } from "@/hooks/useAsync"
 import { formatarDiaRelativo, formatarHora } from "@/lib/format"
 import { getResumoArmario } from "@/services/armarioService"
-import { getResumoPedidos } from "@/services/secretariaService"
+import { getResumoPedidos, observarSolicitacoes } from "@/services/secretariaService"
 
 function plural(n, singular, pluralTexto) {
   return `${n} ${n === 1 ? singular : pluralTexto}`
@@ -55,7 +55,7 @@ function StatusPedidos({ resumo }) {
 export default function Servicos() {
   const [agora] = useState(() => new Date())
   const { data: armario } = useAsync(getResumoArmario)
-  const { data: pedidos } = useAsync(getResumoPedidos)
+  const { data: pedidos } = useAsync(getResumoPedidos, observarSolicitacoes)
 
   return (
     <>

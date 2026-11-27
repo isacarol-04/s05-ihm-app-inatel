@@ -1,6 +1,7 @@
 import tiposDocumento from "@/data/tiposDocumento.json"
 import solicitacoesIniciais from "@/data/solicitacoes.json"
 import { paraDataIso } from "@/lib/format"
+import { registrarAtualizacoes } from "./notificacoesService"
 import { delay, load, save } from "./storage"
 
 const CHAVE = "solicitacoes"
@@ -14,7 +15,9 @@ function avisarAtualizacao() {
 }
 
 function salvarSolicitacoes(solicitacoes) {
+  const anteriores = load(CHAVE, solicitacoesIniciais)
   save(CHAVE, solicitacoes)
+  registrarAtualizacoes(anteriores, solicitacoes)
   avisarAtualizacao()
 }
 
