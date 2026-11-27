@@ -21,7 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { useAsync } from "@/hooks/useAsync"
 import { formatarDataHora, formatarDiaMes, lerData } from "@/lib/format"
 import { cn } from "@/lib/utils"
-import { FORMAS_ENTREGA, STATUS, STATUS_FINAIS, avaliar, cancelar, getSolicitacao, observarSolicitacoes, podeCancelar, responderPendencia } from "@/services/secretariaService"
+import { FORMAS_ENTREGA, STATUS, STATUS_FINAIS, avaliar, cancelar, confirmarRetirada, dataDoStatusAtual, getSolicitacao, observarSolicitacoes, podeAvaliarAtendimento, podeCancelar, podeConfirmarRetirada, responderPendencia } from "@/services/secretariaService"
 
 function detalhesDoPedido(pedido) {
   const itens = [
@@ -41,6 +41,7 @@ export default function PedidoDetalhe() {
   const carregar = useCallback(() => getSolicitacao(protocolo), [protocolo])
   const { data: pedido, loading, atualizar, recarregar } = useAsync(carregar, observarSolicitacoes)
   const [confirmando, setConfirmando] = useState(false)
+  const [confirmandoRetirada, setConfirmandoRetirada] = useState(false)
   const [respondido, setRespondido] = useState(false)
   const [erro, setErro] = useState(null)
   const [agora] = useState(() => new Date())
@@ -62,7 +63,8 @@ export default function PedidoDetalhe() {
   const pendente = pedido.status === STATUS.PENDENTE
   // documento pronto em PDF (tela 15): a tela mostra o arquivo em vez da linha do tempo
   const pdfPronto = pedido.status === STATUS.PRONTA && pedido.formaEntrega === "pdf" && pedido.documento
-  const podeAvaliar = pedido.status === STATUS.PRONTA || pedido.status === STATUS.ENTREGUE
+  const podeAvaliar = podeAvaliarAtendimento(pedido)
+  const retiradaDisponivel = podeConfirmarRetirada(pedido)
 
   async function cancelarPedido() {
     setErro(null)
@@ -80,6 +82,16 @@ export default function PedidoDetalhe() {
     atualizar({ ...pedido, avaliacao: { nota } })
     try {
       atualizar(await avaliar(pedido.protocolo, nota))
+    } catch (e) {
+      setErro(e.message)
+      recarregar()
+    }
+  }
+
+  async function registrarRetirada() {
+    setErro(null)
+    try {
+      atualizar(await confirmarRetirada(pedido.protocolo))
     } catch (e) {
       setErro(e.message)
       recarregar()
@@ -130,10 +142,16 @@ export default function PedidoDetalhe() {
       {pdfPronto ? <DocumentoPronto pedido={pedido} /> : <LinhaDoTempo etapas={montarEtapas(pedido)} />}
 
       {/* impresso pronto: diz onde e quando retirar */}
-      {pedido.status === STATUS.PRONTA && !pdfPronto && (
+      {retiradaDisponivel && (
         <InfoBox icone={MapPin} tom="success" className="mt-4">
           Pronto para retirada na Secretaria Acadêmica (Prédio 1, térreo), de seg. a sex., das 8h às 17h. Leve um
           documento com foto.
+        </InfoBox>
+      )}
+
+      {pedido.formaEntrega === "impresso" && pedido.status === STATUS.ENTREGUE && (
+        <InfoBox icone={CircleCheck} tom="success" className="mt-4" role="status">
+          Retirada confirmada em {formatarDataHora(dataDoStatusAtual(pedido))}. Seu pedido foi concluído.
         </InfoBox>
       )}
 
@@ -167,6 +185,26 @@ export default function PedidoDetalhe() {
           </Button>
         </RodapeAcoes>
       )}
+
+      {retiradaDisponivel && (
+        <RodapeAcoes legenda="Confirme após receber o documento na secretaria.">
+          <Button size="xl" className="w-full" onClick={() => setConfirmandoRetirada(true)}>
+            <MapPin className="size-5" /> Confirmar retirada
+          </Button>
+        </RodapeAcoes>
+      )}
+
+      <ConfirmarDialog
+        aberto={confirmandoRetirada}
+        onAbertoChange={setConfirmandoRetirada}
+        icone={MapPin}
+        tom="primary"
+        titulo="Confirmar retirada?"
+        descricao={`Você já recebeu o documento de ${pedido.tipo.nome} na secretaria? Ao confirmar, o pedido será marcado como entregue.`}
+        textoCancelar="Ainda não"
+        textoConfirmar="Sim, já retirei"
+        onConfirmar={registrarRetirada}
+      />
 
       <ConfirmarDialog
         aberto={confirmando}
