@@ -1,4 +1,5 @@
 import { formatarDiaRelativo, formatarHora } from "@/lib/format"
+import { agruparDocumentosProntos } from "@/lib/avisos"
 import { lerReservaAtual } from "./armarioService"
 import { STATUS, getTipo, lerSolicitacoes } from "./secretariaService"
 import { lerUsuario } from "./usuarioService"
@@ -9,13 +10,14 @@ import { delay } from "./storage"
 export async function getAvisos(agora = new Date()) {
   await delay()
   const avisos = []
+  const solicitacoes = lerSolicitacoes()
 
-  lerSolicitacoes().forEach((solicitacao) => {
+  solicitacoes.forEach((solicitacao) => {
     const tipo = getTipo(solicitacao.tipoId)
-
     if (solicitacao.status === STATUS.PRONTA) {
       avisos.push({
         id: `pronta-${solicitacao.protocolo}`,
+        categoria: "documento-pronto",
         tom: "success",
         icone: "documento",
         titulo: tipo.avisoPronto,
@@ -23,7 +25,6 @@ export async function getAvisos(agora = new Date()) {
         para: `/secretaria/pedidos/${solicitacao.protocolo}`,
       })
     }
-
     if (solicitacao.status === STATUS.PENDENTE) {
       avisos.push({
         id: `pendente-${solicitacao.protocolo}`,
@@ -60,5 +61,5 @@ export async function getAvisos(agora = new Date()) {
     })
   }
 
-  return avisos
+  return agruparDocumentosProntos(avisos)
 }
