@@ -69,9 +69,17 @@ export function lerSolicitacoes(agora = new Date()) {
   let mudou = false
 
   solicitacoes.forEach((solicitacao) => {
-    // Os exemplos continuam nos seus estados originais. Nesta etapa,
-    // apenas pedidos em PDF criados ou retomados pelo usuário avançam.
-    if (solicitacao.formaEntrega !== "pdf") return
+    // Retoma impressos criados antes de o fluxo de retirada existir.
+    // Exemplos de PDF continuam nos seus estados originais.
+    if (
+      solicitacao.formaEntrega === "impresso" &&
+      !solicitacao.simulacao &&
+      [STATUS.RECEBIDA, STATUS.EM_ANALISE].includes(solicitacao.status)
+    ) {
+      const espera = solicitacao.status === STATUS.RECEBIDA ? TEMPO_PARA_ANALISE : TEMPO_EM_ANALISE
+      solicitacao.simulacao = { atualizarEm: new Date(agora.getTime() + espera).toISOString() }
+      mudou = true
+    }
 
     while (
       solicitacao.simulacao?.atualizarEm &&
@@ -85,13 +93,13 @@ export function lerSolicitacoes(agora = new Date()) {
       } else {
         solicitacao.status = STATUS.PRONTA
         solicitacao.simulacao = null
-        // Usa o mesmo arquivo de exemplo que o botão de download já oferece.
-        solicitacao.documento = {
+        // Só a entrega digital usa o arquivo de exemplo já disponível no app.
+        solicitacao.documento = solicitacao.formaEntrega === "pdf" ? {
           arquivo: "documento-exemplo.pdf",
           tamanhoKb: 2,
           codigoValidacao: "EXEMPLO",
           dataEmissao: data,
-        }
+        } : null
       }
       solicitacao.historico.push({ status: solicitacao.status, data })
       mudou = true
@@ -240,9 +248,7 @@ export async function criarSolicitacao({ tipoId, finalidade, formaEntrega, anexo
     pendencias: [],
     documento: null,
     avaliacao: null,
-    simulacao: formaEntrega === "pdf"
-      ? { atualizarEm: new Date(agora.getTime() + TEMPO_PARA_ANALISE).toISOString() }
-      : null,
+    simulacao: { atualizarEm: new Date(agora.getTime() + TEMPO_PARA_ANALISE).toISOString() },
   }
 
   salvarSolicitacoes([solicitacao, ...solicitacoes])
@@ -252,6 +258,31 @@ export async function criarSolicitacao({ tipoId, finalidade, formaEntrega, anexo
 // só dá para cancelar enquanto a secretaria ainda não começou a analisar
 export function podeCancelar(pedido) {
   return pedido.status === STATUS.RECEBIDA
+}
+
+export function podeConfirmarRetirada(pedido) {
+  return pedido.formaEntrega === "impresso" && pedido.status === STATUS.PRONTA
+}
+
+export function podeAvaliarAtendimento(pedido) {
+  return pedido.status === STATUS.ENTREGUE || (pedido.formaEntrega === "pdf" && pedido.status === STATUS.PRONTA)
+}
+
+export async function confirmarRetirada(protocolo, agora = new Date()) {
+  await delay(400)
+  const solicitacoes = lerSolicitacoes(agora)
+  const solicitacao = solicitacoes.find((s) => s.protocolo === protocolo)
+  if (!solicitacao) throw new Error("Pedido não encontrado.")
+  if (solicitacao.formaEntrega !== "impresso") throw new Error("Esse pedido tem entrega em PDF no app.")
+  // Repetir uma confirmação já registrada não duplica o histórico nem os avisos.
+  if (solicitacao.status === STATUS.ENTREGUE) return { ...solicitacao, tipo: getTipo(solicitacao.tipoId) }
+  if (!podeConfirmarRetirada(solicitacao)) throw new Error("Aguarde o documento ficar pronto para confirmar a retirada.")
+
+  solicitacao.status = STATUS.ENTREGUE
+  solicitacao.simulacao = null
+  solicitacao.historico.push({ status: STATUS.ENTREGUE, data: agora.toISOString() })
+  salvarSolicitacoes(solicitacoes)
+  return { ...solicitacao, tipo: getTipo(solicitacao.tipoId) }
 }
 
 export async function cancelar(protocolo, agora = new Date()) {
@@ -292,9 +323,7 @@ export async function responderPendencia(protocolo, { texto, anexo = null }, ago
   })
   solicitacao.status = STATUS.EM_ANALISE
   solicitacao.historico.push({ status: STATUS.EM_ANALISE, data })
-  solicitacao.simulacao = solicitacao.formaEntrega === "pdf"
-    ? { atualizarEm: new Date(agora.getTime() + TEMPO_EM_ANALISE).toISOString() }
-    : null
+  solicitacao.simulacao = { atualizarEm: new Date(agora.getTime() + TEMPO_EM_ANALISE).toISOString() }
 
   salvarSolicitacoes(solicitacoes)
   return { ...solicitacao, tipo: getTipo(solicitacao.tipoId) }
@@ -303,9 +332,10 @@ export async function responderPendencia(protocolo, { texto, anexo = null }, ago
 // nota de 1 a 5 para o atendimento (pode trocar depois)
 export async function avaliar(protocolo, nota, agora = new Date()) {
   await delay(200)
-  const solicitacoes = lerSolicitacoes()
+  const solicitacoes = lerSolicitacoes(agora)
   const solicitacao = solicitacoes.find((s) => s.protocolo === protocolo)
   if (!solicitacao) throw new Error("Pedido não encontrado.")
+  if (!podeAvaliarAtendimento(solicitacao)) throw new Error("Avalie o atendimento depois de receber seu documento.")
 
   solicitacao.avaliacao = { nota, data: agora.toISOString() }
   salvarSolicitacoes(solicitacoes)
