@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { cn } from "@/lib/utils"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +22,7 @@ export function ConfirmarDialog({
   textoCancelar = "Cancelar",
   textoConfirmar,
   onConfirmar,
+  tom = "danger",
 }) {
   const [executando, setExecutando] = useState(false)
 
@@ -41,7 +43,7 @@ export function ConfirmarDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           {Icone && (
-            <AlertDialogMedia className="bg-destructive-soft text-destructive">
+            <AlertDialogMedia className={tom === "primary" ? "bg-accent text-primary" : "bg-destructive-soft text-destructive"}>
               <Icone />
             </AlertDialogMedia>
           )}
@@ -55,7 +57,7 @@ export function ConfirmarDialog({
           </AlertDialogCancel>
           <AlertDialogAction
             size="xl"
-            className="min-w-0 flex-1 bg-destructive px-3 text-white hover:bg-destructive/90"
+            className={cn("min-w-0 flex-1 px-3", tom === "danger" && "bg-destructive text-white hover:bg-destructive/90")}
             disabled={executando}
             onClick={confirmar}
           >
